@@ -1,0 +1,15 @@
+
+# Ignore specific files
+db.sqlite3
+secrets.txt
+secrets.py
+
+# All files with extension
+*.log
+*.pyc
+
+# Entire directory
+misc/
+
+
+
