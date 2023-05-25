@@ -3,6 +3,7 @@
 db.sqlite3
 secrets.txt
 secrets.py
+build
 
 # All files with extension
 *.log
