@@ -1,7 +1,0 @@
-#!/bin/sh
-git fetch origin
-git reset --hard origin/main
-python manage.py makemigrations
-python manage.py migrate
-sqlite3 db.sqlite3 "VACUUM;"
-sudo systemctl restart apache2
