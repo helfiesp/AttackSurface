@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<header>
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/main_css.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
+    <title>{% block title %}CSIRT{% endblock %}</title>
+</header>
+
+<body>
+ <div class="Top_Nav">
+        <button class="Top_Nav_Button" onclick="location.href='{% url 'index' %}'">CVE</button>
+        <div class="dropdown">
+            <button class="Top_Nav_Button" onclick="location.href='{% url 'shodan' %}'">Attack surface</button>
+            <div class="dropdown-content">
+                <a onclick="location.href='{% url 'shodan' %}'">Shodan</a>
+                <a onclick="location.href='{% url 'domains' %}'">Domains</a>
+            </div>
+        </div>
+        <button class="Top_Nav_Button" onclick="location.href='{% url 'qualys' %}'">Qualys</button>
+        <button class="Top_Nav_Button" onclick="location.href='{% url 'active_directory' %}'">Active directory</button>
+        {% if user.username == 'christian' %}
+            <div class="dropdown">
+                <button class="Top_Nav_Button">Admin</button>
+                <div class="dropdown-content">
+                    <a href="{% url 'exposed_passwords' %}">Exposed passwords</a>
+                    <a href="{% url 'vulnerabilities_upload' %}">Vulnerabilities upload</a>
+                    <a href="{% url 'domains_insert' %}">Insert domain</a>
+                    <a href="{% url 'scans' %}">Scans</a>
+                </div>
+            </div>
+        {% endif %}
+</div>
+{% block content %}{% endblock %}
+</body>
+</html>
