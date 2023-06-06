@@ -9,7 +9,7 @@ def index(request):
 
 def AttackSurfaceDomains(request):
     okdomains = OKDomains.objects.all()
-    return render(request,'attack_surface_domains.html', {'okdomains': okdomains})
+    return render(request,'domains.html', {'okdomains': okdomains})
 
 def URLScan(url):
     data = []
