@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import OKDomains
+from .forms import OKDomainsForm
 import requests
 
 # Create your views here.
