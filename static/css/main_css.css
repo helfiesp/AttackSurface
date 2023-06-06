@@ -1,0 +1,303 @@
+* {
+	font-family: Helvetica;
+}
+form {
+    display: inline-block;
+}
+.Top_Nav{
+    background-color: #3399ff;
+    padding: 10px;
+    margin-top: -10px;
+    margin-left: -10px;
+    height: 50px;
+    text-align: center;
+
+}
+.Top_Nav_Button{
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    background-color: white;
+    display:inline-block;
+    border-color: white;
+    margin: 5px;
+}
+
+.dropdown {
+  display:inline-block;
+
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.LoginContainer {
+    table-layout: fixed;
+    width: 300px;
+    margin: auto;
+    border-radius: 10px;
+    padding: 20px;
+    border-color: #bbdcfc;
+    background-color: #bbdcfc;
+}
+.LoginButton {
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    background-color: white;
+    border-color: white;
+    margin: 5px;
+}
+.LoginButtonArea {
+    text-align: center;
+}
+
+.CVE_table {
+    table-layout: fixed;
+    width: 1600px;
+    margin: auto;
+}       
+.CVE_table li.notselected
+{
+ background-color:#bbdcfc;
+ color:#292A0A;	
+}
+.CVE_table li.selected
+{
+ background-color:#3399ff;
+ color:#292A0A;	
+}
+.CVE_table_menu {
+    margin: auto;
+}
+
+.CVE_Table_Header {
+    width: 1600px;
+    margin: auto;
+}
+
+.CVE_Table_Search {
+    position:  relative;
+    width: 1600px;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}  
+
+
+.Alert_Button {
+    padding: 10px;
+    font-weight: bold;
+    display: flex;
+}
+.Alert_Checkbox {
+    text-align: center;
+    width: 50px;
+    transform: scale(1.2);
+}
+.alert_textbox{
+    margin-bottom: 10px;
+}
+.Send_Alert_Menu{
+    padding: 0px;
+}
+.Send_Alert_Menu_Objects {
+    padding: 10px;
+}
+.CVE_Statistics{
+    font-weight: ;
+}
+.ErrorMsg {
+    margin-bottom: -30px;
+}
+.CVE_table th { 
+    font-weight: bold; 
+    color: black; 
+    padding:10px; 
+    background-color: #3399ff;
+    border-radius: 5px;
+} 
+.CVE_table td { 
+    padding:10px;
+    border-radius: 5px; 
+} 
+.CVE_table tr {
+    background-color: #bbdcfc;
+}
+.CVE_table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.CVSS_Score_Numeric_DarkRed {
+    font-weight: bold;
+    text-align: center;
+    background-color: #eb2d23;
+    width: 50px;
+}
+.CVSS_Score_Numeric_Red {
+    font-weight: bold;
+    text-align: center;
+    background-color: #fc5c53;
+    width: 50px;
+}
+.CVSS_Score_Numeric_Yellow {
+    font-weight: bold;
+    text-align: center;
+    background-color: #fcba03;
+    width: 50px;
+}
+.CVSS_Score_Numeric_Green {
+    font-weight: bold;
+    text-align: center;
+    background-color: #66fa75;
+    width: 50px;
+}
+.CVSS_Score_Numeric_Grey {
+    font-weight: bold;
+    text-align: center;
+    background-color: #8f8f8f;
+    width: 50px;
+}
+.CVSS_Score_NA {
+    text-align: center;
+    font-weight: bold;
+    width: 50px;
+}
+.CVSS_Critical {
+    background-color: #8f0b01;
+    display:inline;
+    text-decoration: none;
+    outline: none;
+    border:none;
+    color: inherit;
+}
+.CVSS_High {
+    background-color: #f74d40;
+    display:inline;
+    text-decoration: none;
+    outline: none;
+    border:none;
+     color: inherit;
+}
+.CVSS_Medium {
+    background-color: #c2a41d;
+    display:inline;
+    text-decoration: none;
+    outline: none;
+    border:none;
+    color: inherit;
+}
+.CVSS_Low {
+    color: #5d9441;
+    display:inline;
+    text-decoration: none;
+    outline: none;
+    background-color: #5d9441;
+    color: inherit;
+}
+
+.TableFilters {
+    position:  relative;
+    width: 1600px;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.ButtonTableFilters {
+    border-radius: 5px;
+    border-color: #3399ff;
+    color: white;
+    padding: 8px 18px;
+    background-color: #3399ff;
+    cursor: pointer;
+}
+.CVE_Table_HR {
+    position:  relative;
+    width: 1600px;
+    margin: auto;
+}
+.checkbox_container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.checkbox_container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #eee;
+}
+.checkbox_container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox_container input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox_container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox_container .checkmark:after {
+  left: 5px;
+  top: 3px;
+  width: 3px;
+  height: 6px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
