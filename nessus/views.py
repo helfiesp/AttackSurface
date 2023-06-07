@@ -13,7 +13,7 @@ def AttackSurfaceDomains(request):
     okdomains = OKDomains.objects.all()
     return render(request,'domains.html', {'okdomains': okdomains})
 
-def URLScan(url):
+def URLScan(request, url):
     data = []
     base_query = 'https://urlscan.io/api/v1/search/?q=domain:{}'.format(url)
     header = {"Authorization": os.environ["URLSCAN_API_SECRET"]}
@@ -22,7 +22,17 @@ def URLScan(url):
     result_took = result["took"]
     for entry in result["results"]:
         data.append(entry)
-    return data
+    UpdateURLScanData(data)
+    return render(request, "domains.html")
+
+
+
+def UpdateURLScanData(data):
+    # Updates the known_exploited field in the QualysDB
+    existing_entry = OKDomains.objects.filter(domain=domain)
+    if existing_entry.urlscan != data:  # Only update if the value has changed
+        existing_entry.urlscan = data
+        existing_entry.save()
 
 def DomainURLScan(request):
     if request.method == 'POST':
@@ -30,8 +40,7 @@ def DomainURLScan(request):
         domains = domains.split(",")
         for entry in domains:
             domain = entry.replace('http://','').replace('https://','').replace('/', '').replace('www.','')
-            results = URLScan(domain)
-            print(results)
+            results = URLScan(request, domain)
 
     return render(request, "domains.html")
 
