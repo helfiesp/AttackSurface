@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import OKDomains
 from .forms import OKDomainsForm
 import requests
+import os 
 
 # Create your views here.
 def index(request):
