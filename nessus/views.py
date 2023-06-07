@@ -22,7 +22,7 @@ def URLScan(request, url):
     result_took = result["took"]
     for entry in result["results"]:
         data.append(entry)
-    UpdateURLScanData(data)
+    UpdateURLScanData(str(data))
     return render(request, "domains.html")
 
 
