@@ -38,9 +38,12 @@ def DomainURLScan(request):
     if request.method == 'POST':
         domains = request.POST.get('domains')
         domains = domains.split(",")
-        for entry in domains:
-            domain = entry.replace('http://','').replace('https://','').replace('/', '').replace('www.','')
-            results = URLScan(request, domain)
+        try:
+	        for entry in domains:
+	            domain = entry.replace('http://','').replace('https://','').replace('/', '').replace('www.','')
+	            results = URLScan(request, domain)
+	    except Exception as E:
+	    	print(E)
 
     return render(request, "domains.html")
 
