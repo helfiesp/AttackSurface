@@ -36,14 +36,11 @@ def UpdateURLScanData(data):
 
 def DomainURLScan(request):
 	if request.method == 'POST':
-		domains = request.POST.get('domains')
-		domains = domains.split(",")
-		try:
-			for entry in domains:
-				domain = entry.replace('http://','').replace('https://','').replace('/', '').replace('www.','')
-				results = URLScan(request, domain)
-		except Exception as E:
-			print(E)
+		domains = request.POST.get('domains').split(",")
+		print(domains)
+		for entry in domains:
+			domain = entry.replace('http://','').replace('https://','').replace('/', '').replace('www.','')
+			results = URLScan(request, domain)
 
 	return render(request, "domains.html")
 
