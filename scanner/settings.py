@@ -27,7 +27,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["scanner.okcsirt.no", "10.0.5.115", "3.126.28.33"]
+ALLOWED_HOSTS = ["scanner.okcsirt.no", "10.0.5.115", "3.126.28.33", "localhost", "wpad.home"]
 
 
 # Application definition
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'scanner.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/var/csirt/source/scanner/templates'],
+        'DIRS': ['/var/csirt/source/scanner/templates', 'C:/Users/Helfie/Documents/GitHub/Scanner/AttackSurface/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,8 +117,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_URL = '/static/' 
+STATICFILES_DIRS = (
+    os.path.normpath(os.path.join(BASE_DIR, "static")),
+)
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECURE_BROWSER_XSS_FILTER = True

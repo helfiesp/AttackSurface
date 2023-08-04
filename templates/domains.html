@@ -9,46 +9,141 @@
     <p>Her ligger oversikten over alle domener.</p>
 </div>
 
-<form method="post" action="{% url 'domains_urlscan' %}">
-    {% csrf_token %}
-    <input type="hidden" name="domains" value="{% for okdomain in okdomains %}{{ okdomain.domain }}{% if not forloop.last %},{% endif %}{% endfor %}">
-    <button type="submit">Send Domains</button>
-</form>
+<!-- New row of buttons above the table -->
 
 <div class="CVE_table">
+  <div class="button-row d-flex justify-content-end mb-3">
+    <button class="btn btn-primary btn-sm mr-3" onclick="location.href='{% url 'domains_insert' %}'">New Domain</button>
+    <div class="dropdown">
+      <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="scanDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Scans
+      </button>
+      <div class="dropdown-content" aria-labelledby="scanDropdown">
+          <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'domains_urlscan' %}'">Run URLScan</button>
+
+        <form class="dropdown-item" method="post" action="{% url 'nmap_domain_scan' %}">
+          {% csrf_token %}
+          <input type="hidden" name="domains" value="{% for okdomain in okdomains %}{{ okdomain.domain }}{% if not forloop.last %},{% endif %}{% endfor %}">
+          <button type="submit" class="btn btn-primary btn-sm">Run NMAP Scan</button>
+        </form>
+
+        <form class="dropdown-item" method="post" action="{% url 'ip_geolocation_lookup' %}">
+          {% csrf_token %}
+          <input type="hidden" name="ip_addresses" value="{% for okdomain in okdomains %}{{ okdomain.urlscan.page.ip }}{% if not forloop.last %},{% endif %}{% endfor %}">
+          <button type="submit" class="btn btn-primary btn-sm">Run IP Geolocation Lookup</button>
+        </form>
+        <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'domains_ip_check' %}'">IP pingcheck</button>
+
+
+
+      </div>
+    </div>
+  </div>
+
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Domain</th>
-                    <th>Registrar</th>
+                    <th>Full url</th>
                     <th>Server</th>
-                    <th>URL Scan</th>
-                    <th>System</th>
-                    <th>System Owner</th>
+                    <th>IP</th>
+                    <th>Screenshot</th>
+                    <th>TLS issuer</th>
+                    <th>URLScan time</th>
+                    <th>NMAP Data</th>
+                    <!--<th>System Owner</th>-->
+                    <!--<th>Vulnerabilities</th>-->
+                    <th>Country & ISP</th>
                     <th>Comments</th>
-                    <th>Vulnerabilities</th>
-                    <th>Changes Since Last</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for okdomain in okdomains %}
-                <tr>
-                    <td><a href="{{ okdomain.domain }}">{{ okdomain.domain }}</a></td>
-                    <td>{{ okdomain.registrar }}</td>
-                    <td>{{ okdomain.server }}</td>
-                    <td>{{ okdomain.urlscan }}</td>
-                    <td>{{ okdomain.system }}</td>
-                    <td>{{ okdomain.system_owner }}</td>
-                    <td>{{ okdomain.comments }}</td>
-                    <td>{{ okdomain.vulnerabilities }}</td>
-                    <td>{{ okdomain.changes_since_last }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
+           <tbody>
+            {% for okdomain in okdomains %}
+            <tr>
+                <td><a href="https://www.{{ okdomain.domain }}" target="_blank">{{ okdomain.domain }}</a></td>
+                <td><a href="{{ okdomain.urlscan.page.url }}" target="_blank">Besøk URL</a></td>
+                <td>{{ okdomain.server }}</td>
+                <td>{{ okdomain.ip }}</td> 
+
+                <td>
+                    <a href="#" class="image-overlay-trigger" data-image-url="{{ okdomain.urlscan.screenshot }}">
+                        <img src="{{ okdomain.urlscan.screenshot }}" alt="Screenshot" class="rounded-image" width="200">
+                    </a>
+                </td>
+                <td>{{ okdomain.urlscan.page.tlsIssuer }}</td>
+                <!--<td>{{ okdomain.system_owner }}</td>-->
+                <!--<td>{{ okdomain.vulnerabilities }}</td>-->
+                <td>{{ okdomain.urlscan.task.time }}</td>
+                <td>
+                    {{ okdomain.nmap|join:", " }}
+                </td>
+                <td><b>{{ okdomain.ip_data.country_name }}</b>, {{ okdomain.ip_data.isp }} </td>
+                <td>
+                    <form class="update-comments-form" method="post" action="{% url 'update_comments' okdomain.pk %}">
+                        {% csrf_token %}
+                        <textarea name="comments" rows="3" cols="40">{{ okdomain.comments }}</textarea>
+                        <button type="submit">Update Comments</button>
+                    </form>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
         </table>
     </div>
 </div>
 
+<!-- CSS for the button row -->
+<style>
+    .button-row {
+        text-align: right;
+        margin: 10px;
+    }
+
+    .button-row button {
+        margin-left: 10px;
+    }
+</style>
+
+<!-- JavaScript to handle the overlay -->
+<script>
+    // Wait for the document to be ready
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get all the image overlay triggers
+        const imageOverlayTriggers = document.querySelectorAll(".image-overlay-trigger");
+
+        // Add click event listeners to each trigger
+        imageOverlayTriggers.forEach(trigger => {
+            trigger.addEventListener("click", function(event) {
+                event.preventDefault();
+
+                // Get the image URL from the trigger's data attribute
+                const imageUrl = this.dataset.imageUrl;
+
+                // Create the overlay element
+                const overlay = document.createElement("div");
+                overlay.className = "image-overlay";
+
+                // Create the image element
+                const image = document.createElement("img");
+                image.src = imageUrl;
+                image.className = "rounded-image"; // Apply rounded corners to the overlay image
+
+                // Add the image to the overlay
+                overlay.appendChild(image);
+
+                // Add the overlay to the document body
+                document.body.appendChild(overlay);
+
+                // Add a click event listener to the overlay to remove it when clicked
+                overlay.addEventListener("click", function() {
+                    document.body.removeChild(overlay);
+                });
+            });
+        });
+    });
+</script>
 
 {% endblock %}
