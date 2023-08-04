@@ -6,7 +6,6 @@ import requests
 import os 
 from django.shortcuts import render, get_object_or_404
 import json
-import nmap
 import time
 import subprocess
 import socket
