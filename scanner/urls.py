@@ -31,4 +31,5 @@ urlpatterns = [
     path('domains/ip_geolocation_lookup', views.IPGeoLookup, name='ip_geolocation_lookup'),
     path('domains/update_comments/<int:pk>/', views.UpdateDomainComments, name='update_comments'),
 
+    path('nessus/scan', views.NessusScan,name="nessus_scan"),
 ]
