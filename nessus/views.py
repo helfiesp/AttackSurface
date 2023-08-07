@@ -179,7 +179,7 @@ def FilterNMAP(nmap_results):
 
 def NessusScan(request):
     api_key = os.environ["NESSUS_API_ACCESS_KEY"]
-    url = "https://nessus.okcsirt.no/api/v2/scans"
+    url = "https://nessus.okcsirt.no/api/scans"
 
     headers = {
         "X-ApiKeys": f"accessKey={api_key}",
@@ -187,7 +187,7 @@ def NessusScan(request):
     }
 
     scan_data = {
-        "uuid": "your-uuid-here",
+        "uuid": "christian",
         "settings": 
             {
             "name": "WebAppScan_oslo_kommune",
