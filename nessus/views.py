@@ -191,7 +191,7 @@ def NessusScan(request):
         "settings": 
             {
             "name": "WebAppScan_oslo_kommune",
-            "enabled": true,
+            "enabled": True,
             "text_targets": "oslo.kommune.no",
             "launch": "ON_DEMAND",
             "description": "Web application scan for oslo.kommune.no"
