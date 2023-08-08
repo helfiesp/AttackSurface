@@ -32,4 +32,7 @@ urlpatterns = [
     path('domains/update_comments/<int:pk>/', views.UpdateDomainComments, name='update_comments'),
 
     path('nessus/scan', views.NessusScan,name="nessus_scan"),
+
+    path('domains/check', views.CheckDomain,name="check_domain"),
+
 ]

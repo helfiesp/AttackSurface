@@ -27,7 +27,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["scanner.okcsirt.no", "10.0.5.115", "3.126.28.33", "localhost", "wpad.home"]
+ALLOWED_HOSTS = ["scanner.okcsirt.no", "10.0.5.115", "3.126.28.33", "localhost", "wpad.home", "127.0.0.1", "wpad"]
 
 
 # Application definition

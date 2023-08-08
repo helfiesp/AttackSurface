@@ -190,6 +190,59 @@ def NessusScan(request):
     print(response.status_code)
     print(response.text)
 
+
+import requests
+
+def CheckDomain(request):
+    all_domains = OKDomains.objects.values_list('domain')
+    domains_to_delete = []
+
+    for entry in all_domains:
+        domain = entry[0]
+        https_url = "https://{}".format(domain)
+        http_url = "http://{}".format(domain)
+        
+        try:
+            # Try HTTPS first
+            response = requests.get(https_url, allow_redirects=True)
+            if response.url != https_url:
+                existing_entry = OKDomains.objects.get(domain=domain)
+                existing_entry.http_code = response.status_code
+                if "https://www.oslo.kommune.no" in response.url:
+                    existing_entry.http_redirect = "oslo.kommune.no"
+                else:
+                    existing_entry.http_redirect = response.url
+                existing_entry.save()
+
+        except requests.RequestException:
+            try:
+                # If HTTPS fails, try HTTP
+                response = requests.get(http_url, allow_redirects=True)
+                if response.url != http_url:
+                    existing_entry = OKDomains.objects.get(domain=domain)
+                    existing_entry.http_code = response.status_code
+                    if "https://www.oslo.kommune.no" in response.url:
+                        existing_entry.http_redirect = "oslo.kommune.no"
+                    else:
+                        existing_entry.http_redirect = response.url
+                    existing_entry.save()
+
+            except requests.RequestException:
+                print("[ERROR]: Could not get HTTP/HTTPS response for: {}".format(domain))
+                domains_to_delete.append(domain)
+
+    # Delete domains with no HTTP/HTTPS response
+    for domain_to_delete in domains_to_delete:
+        try:
+            entry_to_delete = OKDomains.objects.get(domain=domain_to_delete)
+            entry_to_delete.delete()
+            print("[INFO]: Deleted entry for domain: {}".format(domain_to_delete))
+        except OKDomains.DoesNotExist:
+            pass
+
+    return AttackSurfaceDomains(request)
+
+
 def InsertOKDomain(request):
     blacklist = ['powerapps']
     if request.method == 'POST':

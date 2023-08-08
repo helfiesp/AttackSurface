@@ -4,6 +4,8 @@ from django.db import models
 class OKDomains(models.Model):
 	domain = models.TextField(default=None)
 	ip = models.TextField(default=None, null=True)
+	http_code = models.TextField(default=None, null=True)
+	http_redirect = models.TextField(default=None, null=True)
 	registrar = models.TextField(default=None, null=True)
 	server = models.TextField(default=None, null=True)
 	urlscan = models.TextField(default=None, null=True)

@@ -47,6 +47,7 @@
                 <tr>
                     <th>Domain</th>
                     <th>Full url</th>
+                    <th>HTTP code</th>
                     <th>Server</th>
                     <th>IP</th>
                     <th>Screenshot</th>
@@ -61,9 +62,12 @@
             </thead>
            <tbody>
             {% for okdomain in okdomains %}
+
+            {% if okdomain.http_redirect != "oslo.kommune.no" %}
             <tr>
                 <td><a href="https://www.{{ okdomain.domain }}" target="_blank">{{ okdomain.domain }}</a></td>
-                <td><a href="{{ okdomain.urlscan.page.url }}" target="_blank">Besøk URL</a></td>
+                <td><a href="{{ okdomain.http_redirect }}" target="_blank">URL</a></td>
+                <td>{{ okdomain.http_code }}</td>
                 <td>{{ okdomain.server }}</td>
                 <td>{{ okdomain.ip }}</td> 
 
@@ -89,6 +93,7 @@
                 </td>
 
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
         </table>
