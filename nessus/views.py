@@ -178,33 +178,18 @@ def FilterNMAP(nmap_results):
 
 
 def NessusScan(request):
-    api_key = os.environ["NESSUS_API_ACCESS_KEY"]
-    url = "https://nessus.okcsirt.no/api/scans"
+    access_key = os.environ["NESSUS_API_ACCESS_KEY"]
+    secret_key = os.environ["NESSUS_API_SECRET_KEY"]
+    url = "https://nessus.okcsirt.no/scans"
 
     headers = {
-        "X-ApiKeys": f"accessKey={api_key}",
+        "X-ApiKeys": "accessKey={};secretKey={}".format(access_key, secret_key),
         "Content-Type": "application/json"
     }
 
-    scan_data = {
-        "uuid": "christian",
-        "settings": 
-            {
-            "name": "WebAppScan_oslo_kommune",
-            "enabled": True,
-            "text_targets": "oslo.kommune.no",
-            "launch": "ON_DEMAND",
-            "description": "Web application scan for oslo.kommune.no"
-          }
-    }
-
-    response = requests.post(url, json=scan_data, headers=headers)
-
-    if response.status_code == 200:
-        print("Scan created successfully!")
-    else:
-        print(f"Failed to create scan. Response: {response.text}")
-
+    response = requests.get(url, headers=headers, verify=False)
+    print(response.status_code)
+    print(response.text)
 
 def InsertOKDomain(request):
     blacklist = ['powerapps']
