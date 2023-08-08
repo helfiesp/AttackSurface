@@ -2,7 +2,7 @@ import sqlite3
 import requests
 
 def CheckDomain():
-    connection = sqlite3.connect('db.sqlite3')  # Connect to the SQLite database
+    connection = sqlite3.connect('/var/csirt/source/scanner/db.sqlite3')  # Connect to the SQLite database
     cursor = connection.cursor()
 
     cursor.execute("SELECT domain FROM nessus_okdomains")
