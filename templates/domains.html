@@ -40,9 +40,9 @@
     </div>
   </div>
 
-
+    <button onclick="ExportToExcel('xlsx')">Eksporter data</button>
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table id="tbl_exporttable_to_xls" class="table table-striped mt32 exposed-servers sortable">
             <thead>
                 <tr>
                     <th>Domain</th>
@@ -109,6 +109,71 @@
 
 <!-- JavaScript to handle the overlay -->
 <script>
+        function changeRowLimit(value) {
+        var rows = document.getElementById("tbl_exporttable_to_xls").rows;
+        var rowCount = rows.length - 1; // Subtract 1 for the table header row
+
+        if (value === "all") {
+            for (var i = 0; i < rowCount; i++) {
+                rows[i + 1].style.display = ""; // Add 1 to the index to skip the table header row
+            }
+        } else {
+            var limit = parseInt(value);
+
+            for (var i = 0; i < rowCount; i++) {
+                if (i < limit) {
+                    rows[i + 1].style.display = ""; // Add 1 to the index to skip the table header row
+                } else {
+                    rows[i + 1].style.display = "none"; // Add 1 to the index to skip the table header row
+                }
+            }
+        }
+    }
+    function ExportToExcel(type, fn, dl) {
+       var elt = document.getElementById('tbl_exporttable_to_xls');
+       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+       return dl ?
+         XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }):
+         XLSX.writeFile(wb, fn || ('qualys_vulnerabilities.' + (type || 'xlsx')));
+    }
+    (function(document) {
+        'use strict';
+
+        var TableFilter = (function(myArray) {
+            var search_input;
+
+            function _onInputSearch(e) {
+                search_input = e.target;
+                var tables = document.getElementsByClassName(search_input.getAttribute('data-table'));
+                myArray.forEach.call(tables, function(table) {
+                    myArray.forEach.call(table.tBodies, function(tbody) {
+                        myArray.forEach.call(tbody.rows, function(row) {
+                            var text_content = row.textContent.toLowerCase();
+                            var search_val = search_input.value.toLowerCase();
+                            row.style.display = text_content.indexOf(search_val) > -1 ? '' : 'none';
+                        });
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    var inputs = document.getElementsByClassName('search-input');
+                    myArray.forEach.call(inputs, function(input) {
+                        input.oninput = _onInputSearch;
+                    });
+                }
+            };
+        })(Array.prototype);
+
+        document.addEventListener('readystatechange', function() {
+            if (document.readyState === 'complete') {
+                TableFilter.init();
+            }
+        });
+
+    })(document);
+
     // Wait for the document to be ready
     document.addEventListener("DOMContentLoaded", function() {
         // Get all the image overlay triggers
