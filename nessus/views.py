@@ -35,16 +35,7 @@ class APIGetDomainInfo(APIView):
             # ...
 
             # Assuming you have the necessary logic to retrieve the data based on the domain
-            queryset = [
-            {
-            "id": 291,
-            "domain": "webdeb.ren.oslo.kommune.no",
-            "ip": "171.23.5.48",
-            "http_code": "200",
-            "http_redirect": "https://webdeb.ren.oslo.kommune.no/",
-            "nmap": "TEST",
-            }
-            ]
+            queryset = OKDomains.objects.filter(domain__iexact=domain)
             serializer = OKDomainsSerializer(queryset, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
