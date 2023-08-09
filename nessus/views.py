@@ -26,13 +26,11 @@ class APIGetDomainInfo(APIView):
     authentication_classes = [TokenAuthentication]  # Require authentication using API key
 
     def get(self, request, domain, format=None):
-        # You can access the authenticated user using request.user
-        user = request.user
-
         # Get the API key from the headers
         api_key = request.auth.key
 
         # Perform any necessary validation or logic based on the API key
+        # For example, you could check if the API key exists in the database
         # ...
 
         # Assuming you have the necessary logic to retrieve the data based on the domain
