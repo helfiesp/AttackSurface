@@ -41,20 +41,6 @@ class APIGetDomainInfo(APIView):
         serializer = OKDomainsSerializer(queryset, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
-
-class GenerateAPIKey(APIView):
-    permission_classes = [IsAdminUser]  # Requires admin permission
-
-    def post(self, request, username, format=None):
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            return Response({"error": "User does not exist."}, status=status.HTTP_404_NOT_FOUND)
-
-        token, created = Token.objects.get_or_create(user=user)
-
-        return Response({"api_key": token.key}, status=status.HTTP_201_CREATED)
 
 
 
