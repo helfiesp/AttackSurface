@@ -8,15 +8,13 @@ from django.shortcuts import render, get_object_or_404
 import json
 import time
 import subprocess
-from rest_framework import generics, renderers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser
-from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
 from .serializers import OKDomainsSerializer
 import socket
 
@@ -24,14 +22,26 @@ from datetime import datetime
 
 
 
-# API
-class APIGetDomainInfo(generics.RetrieveAPIView):
-    queryset = OKDomains.objects.all()  # Replace with the correct queryset
-    serializer_class = OKDomainsSerializer
-    lookup_field = 'domain'
-    authentication_classes = [TokenAuthentication]  # Add TokenAuthentication
-    permission_classes = [IsAuthenticated]
-    renderer_classes = [renderers.JSONRenderer] 
+class APIGetDomainInfo(APIView):
+    authentication_classes = [TokenAuthentication]  # Require authentication using API key
+    permission_classes = [IsAuthenticated]  # Require authenticated user
+
+    def get(self, request, domain, format=None):
+        # You can access the authenticated user using request.user
+        user = request.user
+
+        # Get the API key from the headers
+        api_key = request.auth.key
+
+        # Perform any necessary validation or logic based on the API key
+        # ...
+
+        # Assuming you have the necessary logic to retrieve the data based on the domain
+        queryset = OKDomains.objects.filter(domain=domain)
+        serializer = OKDomainsSerializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
 
 class GenerateAPIKey(APIView):
     permission_classes = [IsAdminUser]  # Requires admin permission
