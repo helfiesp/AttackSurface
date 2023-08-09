@@ -2,6 +2,9 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
+# Generates an API key for a user:
+# python manage.py generateapikey USERNAME
+
 class Command(BaseCommand):
     help = 'Generate an API key for a user'
 
