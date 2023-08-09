@@ -22,7 +22,6 @@ class APIGetDomainInfo(generics.RetrieveAPIView):
     serializer_class = OKDomainsSerializer
     lookup_field = 'domain'
 
-
 def index(request):
     context = {}
     return render(request, 'index.html', context)
