@@ -24,7 +24,6 @@ from datetime import datetime
 
 class APIGetDomainInfo(APIView):
     authentication_classes = [TokenAuthentication]  # Require authentication using API key
-    permission_classes = [IsAuthenticated]  # Require authenticated user
 
     def get(self, request, domain, format=None):
         # You can access the authenticated user using request.user
