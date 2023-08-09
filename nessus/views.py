@@ -35,7 +35,25 @@ class APIGetDomainInfo(APIView):
             # ...
 
             # Assuming you have the necessary logic to retrieve the data based on the domain
-            queryset = OKDomains.objects.filter(domain=domain)
+            queryset = [
+  {
+    "id": 291,
+    "domain": "webdeb.ren.oslo.kommune.no",
+    "ip": "171.23.5.48",
+    "http_code": "200",
+    "http_redirect": "https://webdeb.ren.oslo.kommune.no/",
+    "registrar": null,
+    "server": null,
+    "urlscan": null,
+    "system": null,
+    "system_owner": null,
+    "comments": null,
+    "vulnerabilities": null,
+    "nmap": "Starting Nmap 7.94 ( https://nmap.org ) at 2023-08-04 07:22 W. Europe Summer Time\nNmap scan report for webdeb.ren.oslo.kommune.no (171.23.5.48)\nHost is up (0.0070s latency).\nNot shown: 98 filtered tcp ports (no-response)\nPORT    STATE SERVICE\n80/tcp  open  http\n443/tcp open  https\n\nNmap done: 1 IP address (1 host up) scanned in 2.14 seconds\n",
+    "ip_data": null,
+    "changes_since_last": null
+  }
+]
             serializer = OKDomainsSerializer(queryset, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
