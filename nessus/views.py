@@ -26,33 +26,28 @@ class APIGetDomainInfo(APIView):
     authentication_classes = [TokenAuthentication]  # Require authentication using API key
 
     def get(self, request, domain, format=None):
-        try:
-            # Get the API key from the request headers
-            api_key = request.META.get('HTTP_AUTHORIZATION', '').replace('Token ', '')
+        # Get the API key from the request headers
+        api_key = request.META.get('HTTP_AUTHORIZATION', '').replace('Token ', '')
 
-            # Perform any necessary validation or logic based on the API key
-            # For example, you could check if the API key exists in the database
-            # ...
+        # Perform any necessary validation or logic based on the API key
+        # For example, you could check if the API key exists in the database
+        # ...
 
-            # Assuming you have the necessary logic to retrieve the data based on the domain
-            connection = sqlite3.connect('/var/csirt/source/scanner/db.sqlite3')
-            cursor = connection.cursor()
+        # Assuming you have the necessary logic to retrieve the data based on the domain
+        connection = sqlite3.connect('/var/csirt/source/scanner/db.sqlite3')
+        cursor = connection.cursor()
 
-            query = f"SELECT * FROM nessus_okdomains WHERE domain = ?"
-            cursor.execute(query, (domain,))
-            rows = cursor.fetchall()
-            print(rows)
-            connection.close()
+        query = f"SELECT * FROM nessus_okdomains WHERE domain = ?"
+        cursor.execute(query, (domain,))
 
-            # Assuming you have the necessary logic to serialize the retrieved data
-            serializer = OKDomainsSerializer(data=rows, many=True)
-            serializer.is_valid()
-   
+        connection.close()
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            # Handle any exceptions that might occur during validation or data retrieval
-            return Response({"error": "An error occurred while processing the request."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Assuming you have the necessary logic to serialize the retrieved data
+        serializer = OKDomainsSerializer(data=rows, many=True)
+        serializer.is_valid()
+
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 def index(request):
