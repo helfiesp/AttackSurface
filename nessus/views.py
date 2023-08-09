@@ -38,8 +38,8 @@ class APIGetDomainInfo(APIView):
         connection = sqlite3.connect('/var/csirt/source/scanner/db.sqlite3')
         cursor = connection.cursor()
 
-        query = f"SELECT * FROM nessus_okdomains WHERE domain = ?"
-        cursor.execute(query, (domain,))
+        query = 'SELECT * FROM nessus_okdomains WHERE domain = "webdeb.ren.oslo.kommune.no"'
+        cursor.execute(query)
         rows = cursor.fetchall()
 
         connection.close()
