@@ -40,6 +40,7 @@ class APIGetDomainInfo(APIView):
 
         query = f"SELECT * FROM nessus_okdomains WHERE domain = ?"
         cursor.execute(query, (domain,))
+        rows = cursor.fetchall()
 
         connection.close()
 
@@ -47,8 +48,8 @@ class APIGetDomainInfo(APIView):
         serializer = OKDomainsSerializer(data=rows, many=True)
         serializer.is_valid()
 
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 def index(request):
