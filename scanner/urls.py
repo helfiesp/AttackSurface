@@ -37,5 +37,6 @@ urlpatterns = [
 
     # API
     path('api/domain/<str:domain>/', views.APIGetDomainInfo.as_view(), name='api_domain_info'),
+    path('api/generate/<str:username>/', views.GenerateAPIKey.as_view(), name='generate_api_key'),
 
 ]

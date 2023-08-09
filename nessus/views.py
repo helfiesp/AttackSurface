@@ -9,6 +9,12 @@ import json
 import time
 import subprocess
 from rest_framework import generics, renderers
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAdminUser
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 from .serializers import OKDomainsSerializer
 import socket
 
@@ -22,6 +28,21 @@ class APIGetDomainInfo(generics.RetrieveAPIView):
     serializer_class = OKDomainsSerializer
     lookup_field = 'domain'
     renderer_classes = [renderers.JSONRenderer] 
+
+class GenerateAPIKey(APIView):
+    permission_classes = [IsAdminUser]  # Requires admin permission
+
+    def post(self, request, username, format=None):
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return Response({"error": "User does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response({"api_key": token.key}, status=status.HTTP_201_CREATED)
+
+
 
 def index(request):
     context = {}
