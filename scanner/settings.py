@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nessus',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_api_key',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +84,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_api_key.authentication.CaptureApiKey',
+    ],
 }
 
 
