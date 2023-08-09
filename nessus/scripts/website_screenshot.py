@@ -4,14 +4,13 @@ from selenium import webdriver
 website_url = 'https://www.vg.no'
 
 # Initialize the WebDriver options
-options = webdriver.ChromeOptions()
-options.add_argument('--headless')  # Run in headless mode (no visible browser window)
-options.add_argument('--disable-gpu')  # Disable GPU acceleration
+options = webdriver.FirefoxOptions()
+options.headless = True  # Run in headless mode (no visible browser window)
 
 try:
     # Initialize the WebDriver with options
-    driver = webdriver.Chrome(options=options)
-    
+    driver = webdriver.Firefox(options=options)
+ 
     # Load the website
     driver.get(website_url)
 
@@ -22,6 +21,5 @@ try:
 except Exception as e:
     print(f'An error occurred: {str(e)}')
 finally:
-    if 'driver' in locals():
-        # Close the WebDriver
-        driver.quit()
+    # Close the WebDriver
+    driver.quit()
