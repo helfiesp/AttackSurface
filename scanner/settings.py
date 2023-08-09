@@ -85,11 +85,6 @@ DATABASES = {
     }
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_api_key.authentication.CaptureApiKey',
-    ],
-}
 
 
 # Password validation
