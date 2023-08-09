@@ -8,7 +8,7 @@ from django.shortcuts import render, get_object_or_404
 import json
 import time
 import subprocess
-from rest_framework import generics
+from rest_framework import generics, renderers
 from .serializers import OKDomainsSerializer
 import socket
 
@@ -21,6 +21,7 @@ class APIGetDomainInfo(generics.RetrieveAPIView):
     queryset = OKDomains.objects.all()  # Replace with the correct queryset
     serializer_class = OKDomainsSerializer
     lookup_field = 'domain'
+    renderer_classes = [renderers.JSONRenderer] 
 
 def index(request):
     context = {}
