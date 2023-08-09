@@ -25,5 +25,6 @@ try:
 except Exception as e:
     print(f'An error occurred: {str(e)}')
 finally:
-    # Close the WebDriver
-    driver.quit()
+    if 'driver' in locals():
+        # Close the WebDriver
+        driver.quit()
