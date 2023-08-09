@@ -1,14 +1,16 @@
 from selenium import webdriver
 
-# Set the path to the WebDriver executable (chromedriver)
-chromedriver_path = '/usr/local/bin/chromedriver'
-
 # Set the URL of the website you want to capture
 website_url = 'https://www.vg.no'
 
+# Initialize the WebDriver options
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')  # Run in headless mode (no visible browser window)
+options.add_argument('--disable-gpu')  # Disable GPU acceleration
+
 try:
-    # Initialize the WebDriver
-    driver = webdriver.Chrome(chromedriver_path)
+    # Initialize the WebDriver with options
+    driver = webdriver.Chrome(options=options)
     
     # Load the website
     driver.get(website_url)
