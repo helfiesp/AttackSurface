@@ -1,15 +1,14 @@
 from selenium import webdriver
 
+# Set the path to the geckodriver executable
+geckodriver_path = '/usr/local/bin/geckodriver'
+
 # Set the URL of the website you want to capture
 website_url = 'https://www.vg.no'
 
-# Initialize the WebDriver options
-options = webdriver.FirefoxOptions()
-options.add_argument('-headless')  # Run in headless mode (no visible browser window)
-
 try:
-    # Initialize the WebDriver with options
-    driver = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver', options=options)
+    # Initialize the WebDriver with geckodriver
+    driver = webdriver.Firefox(executable_path=geckodriver_path)
     
     # Load the website
     driver.get(website_url)
