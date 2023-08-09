@@ -35,7 +35,7 @@ class APIGetDomainInfo(APIView):
             # ...
 
             # Assuming you have the necessary logic to retrieve the data based on the domain
-            queryset = OKDomains.objects.filter(domain=domain)
+            queryset = '{"server": "nginx/1.20.1"}'
             serializer = OKDomainsSerializer(queryset, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
