@@ -17,13 +17,13 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .serializers import OKDomainsSerializer
 import socket
-
+import sqlite3
 from datetime import datetime
 
 
 
 class APIGetDomainInfo(APIView):
-    import sqlite3
+
     authentication_classes = [TokenAuthentication]  # Require authentication using API key
 
     def get(self, request, domain, format=None):
