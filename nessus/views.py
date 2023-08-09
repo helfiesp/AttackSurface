@@ -41,7 +41,7 @@ class APIGetDomainInfo(APIView):
             query = f"SELECT * FROM nessus_okdomains WHERE domain = ?"
             cursor.execute(query, (domain,))
             rows = cursor.fetchall()
-
+            print(rows)
             connection.close()
 
             # Assuming you have the necessary logic to serialize the retrieved data
