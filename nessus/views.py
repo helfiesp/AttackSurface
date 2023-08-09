@@ -14,6 +14,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from django.contrib.auth.models import User
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from .serializers import OKDomainsSerializer
 import socket
@@ -27,6 +29,8 @@ class APIGetDomainInfo(generics.RetrieveAPIView):
     queryset = OKDomains.objects.all()  # Replace with the correct queryset
     serializer_class = OKDomainsSerializer
     lookup_field = 'domain'
+    authentication_classes = [TokenAuthentication]  # Add TokenAuthentication
+    permission_classes = [IsAuthenticated]
     renderer_classes = [renderers.JSONRenderer] 
 
 class GenerateAPIKey(APIView):
