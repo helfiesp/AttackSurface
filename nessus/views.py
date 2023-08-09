@@ -35,8 +35,19 @@ class APIGetDomainInfo(APIView):
             # ...
 
             # Assuming you have the necessary logic to retrieve the data based on the domain
-            queryset = OKDomains.objects.filter(domain__iexact=domain)
-            serializer = OKDomainsSerializer(queryset, many=True)
+            connection = sqlite3.connect('/var/csirt/source/scanner/db.sqlite3')
+            cursor = connection.cursor()
+
+            query = f"SELECT * FROM nessus_okdomains WHERE domain = ?"
+            cursor.execute(query, (domain,))
+            rows = cursor.fetchall()
+
+            connection.close()
+
+            # Assuming you have the necessary logic to serialize the retrieved data
+            serializer = OKDomainsSerializer(data=rows, many=True)
+            serializer.is_valid()
+   
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
