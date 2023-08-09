@@ -1,5 +1,5 @@
 import sqlite3
-from misc import secrets
+from scanner.misc import secrets
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import APIKeyHeader
 import os
