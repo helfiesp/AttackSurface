@@ -23,6 +23,7 @@ from datetime import datetime
 
 
 class APIGetDomainInfo(APIView):
+    import sqlite3
     authentication_classes = [TokenAuthentication]  # Require authentication using API key
 
     def get(self, request, domain, format=None):
