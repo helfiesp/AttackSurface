@@ -5,12 +5,12 @@ website_url = 'https://www.vg.no'
 
 # Initialize the WebDriver options
 options = webdriver.FirefoxOptions()
-options.headless = True  # Run in headless mode (no visible browser window)
+options.add_argument('-headless')  # Run in headless mode (no visible browser window)
 
 try:
     # Initialize the WebDriver with options
-    driver = webdriver.Firefox(options=options)
- 
+    driver = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver', options=options)
+    
     # Load the website
     driver.get(website_url)
 
@@ -21,5 +21,6 @@ try:
 except Exception as e:
     print(f'An error occurred: {str(e)}')
 finally:
-    # Close the WebDriver
-    driver.quit()
+    if 'driver' in locals():
+        # Close the WebDriver
+        driver.quit()
