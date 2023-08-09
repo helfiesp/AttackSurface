@@ -24,21 +24,21 @@ from datetime import datetime
 
 class APIGetDomainInfo(APIView):
     authentication_classes = [TokenAuthentication]  # Require authentication using API key
-    permission_classes = [IsAuthenticated]  # Require authenticated user
 
     def get(self, request, domain, format=None):
-        try:
-            # Assuming you have the necessary logic to validate the API key
-            api_key = request.auth.key
+        # Get the API key from the request headers
+        api_key = request.META.get('HTTP_AUTHORIZATION', '').replace('Token ', '')
 
-            # Assuming you have the necessary logic to retrieve the data based on the domain
-            queryset = OKDomains.objects.filter(domain=domain)
-            serializer = OKDomainsSerializer(queryset, many=True)
+        # Perform any necessary validation or logic based on the API key
+        # For example, you could check if the API key exists in the database
+        # ...
 
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            # Handle any exceptions that might occur during validation or data retrieval
-            return Response({"error": "An error occurred while processing the request."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Assuming you have the necessary logic to retrieve the data based on the domain
+        queryset = OKDomains.objects.filter(domain=domain)
+        serializer = OKDomainsSerializer(queryset, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 def index(request):
