@@ -316,12 +316,9 @@ def InsertOKDomain(request):
 
 # API
 
-def APIGetDomain(request):
+def APIGetDomain(request, domain):
     if request.method == 'GET':
-        domain = request.GET.get('domain', None)  # Get the 'domain' parameter from the request
+        data_from_domain = OKDomains.objects.filter(domain=domain).values()  # Query the database
+        return JsonResponse(list(data_from_domain), safe=False)  # Return the data as JSON
 
-        if domain is not None:
-            data_from_domain = OKDomains.objects.filter(domain=domain).values()  # Query the database
-            return JsonResponse(list(data_from_domain), safe=False)  # Return the data as JSON
-
-    return JsonResponse({'error': 'Invalid request'}, status=400)  #
+    return JsonResponse({'error': 'Invalid request'}, status=400)  # Retu
