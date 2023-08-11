@@ -16,6 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.http import JsonResponse
+from django.db import connection
 from django.shortcuts import get_object_or_404
 from .serializers import OKDomainsSerializer
 import socket
@@ -320,14 +321,17 @@ def InsertOKDomain(request):
 
 def APIGetDomain(request, domain):
     if request.method == 'GET':
-        try:
-            data_from_domain = OKDomains.objects.filter(domain=domain).values()  # Query the database
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM yourapp_okdomains WHERE domain = %s", [domain])
+            data_from_domain = dictfetchall(cursor)  # Assuming you have a function to fetch query results as a dictionary
 
-            if not data_from_domain.exists():
-                return JsonResponse({'error': 'No data available for the provided domain'}, status=404)
+        if not data_from_domain:
+            return JsonResponse({'error': 'No data available for the provided domain'}, status=404)
 
-            return JsonResponse(list(data_from_domain), safe=False)  # Return the data as JSON
-        except OKDomains.DoesNotExist:
-            return JsonResponse({'error': 'Invalid domain'}, status=400)
+        return JsonResponse(data_from_domain, safe=False)  # Return the filtered data as JSON
 
     return JsonResponse({'error': 'Invalid request'}, status=400)  # Return an error JSON response if needed
+
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
