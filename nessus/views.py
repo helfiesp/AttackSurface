@@ -25,7 +25,7 @@ from datetime import datetime
 
 def index(request):
     context = {}
-    return render(request, 'index.html', context)
+    return render(request, 'index.html', context)   
 
 
 def UpdateDomainComments(request, pk):
@@ -320,7 +320,14 @@ def InsertOKDomain(request):
 
 def APIGetDomain(request, domain):
     if request.method == 'GET':
-        data_from_domain = OKDomains.objects.filter(domain=domain).values()  # Query the database
-        return JsonResponse(list(data_from_domain), safe=False)  # Return the data as JSON
+        try:
+            data_from_domain = OKDomains.objects.filter(domain=domain).values()  # Query the database
 
-    return JsonResponse({'error': 'Invalid request'}, status=400)  # Retu
+            if not data_from_domain.exists():
+                return JsonResponse({'error': 'No data available for the provided domain'}, status=404)
+
+            return JsonResponse(list(data_from_domain), safe=False)  # Return the data as JSON
+        except OKDomains.DoesNotExist:
+            return JsonResponse({'error': 'Invalid domain'}, status=400)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)  # Return an error JSON response if needed
