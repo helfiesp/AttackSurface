@@ -35,5 +35,7 @@ urlpatterns = [
 
     path('domains/check', views.CheckDomain,name="check_domain"),
 
+    # API
+    path('api/domain/get/<str:domain>/', views.APIGetDomain, name="api_get_domain"),
 
 ]

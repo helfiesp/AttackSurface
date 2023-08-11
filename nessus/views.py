@@ -200,8 +200,6 @@ def NessusScan(request):
     print(response.text)
 
 
-import requests
-
 def CheckDomain(request):
     all_domains = OKDomains.objects.values_list('domain')
     domains_to_delete = []
@@ -314,3 +312,16 @@ def InsertOKDomain(request):
         form = OKDomainsForm()
         context = {'form': form}
         return render(request, 'domains_upload.html', context)
+
+
+# API
+
+def APIGetDomain(request):
+    if request.method == 'GET':
+        domain = request.GET.get('domain', None)  # Get the 'domain' parameter from the request
+
+        if domain is not None:
+            data_from_domain = OKDomains.objects.filter(domain=domain).values()  # Query the database
+            return JsonResponse(list(data_from_domain), safe=False)  # Return the data as JSON
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)  #
