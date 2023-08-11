@@ -322,7 +322,7 @@ def InsertOKDomain(request):
 def APIGetDomain(request, domain):
     if request.method == 'GET':
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM yourapp_okdomains WHERE domain = %s", [domain])
+            cursor.execute("SELECT * FROM nessus_okdomains WHERE domain = %s", [domain])
             data_from_domain = dictfetchall(cursor)  # Assuming you have a function to fetch query results as a dictionary
 
         if not data_from_domain:
