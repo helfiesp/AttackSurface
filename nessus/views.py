@@ -8,16 +8,9 @@ from django.shortcuts import render, get_object_or_404
 import json
 import time
 import subprocess
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from .serializers import OKDomainsSerializer
 import socket
 import sqlite3
 from datetime import datetime
@@ -321,7 +314,7 @@ def InsertOKDomain(request):
 def APIGetDomain(request, domain):
     if request.method == 'GET':
         try:
-            data_from_domain = OKDomains.objects.filter(domain=domain).first()
+            data_from_domain = OKDomains.objects.filter(domain=domain).values()
             if not data_from_domain.exists():
                 return JsonResponse({'error': 'No data available for the provided domain'}, status=404)
 
