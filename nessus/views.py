@@ -205,7 +205,6 @@ def NessusScan(request):
         for scan in scans:
             if scan["name"] == scan_name:
                 scan_id = scan["id"]
-                print(scan_id)
                 break
 
         if scan_id is not None:
@@ -215,6 +214,7 @@ def NessusScan(request):
             response.raise_for_status()  # Raise an exception if the request was unsuccessful
 
             results = response.json()
+            print(results)
             content = "Scan Results:\n" + str(results)
         else:
             content = f"Scan '{scan_name}' not found."
