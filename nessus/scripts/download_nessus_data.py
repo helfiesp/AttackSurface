@@ -31,7 +31,6 @@ def download_exported_scan():
 
         response_data = response.json()
         download_export_id = response_data["file"]
-        print(download_export_id)
 
         download_url = f"{url}/scans/{scan_id}/export/{download_export_id}/download"
         download_response = requests.get(download_url, headers=headers, verify=False)
