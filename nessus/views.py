@@ -182,6 +182,7 @@ def FilterNMAP(nmap_results):
 
 def NessusScan(request):
     from requests.exceptions import RequestException
+    from django.http import HttpResponse
     try:
         access_key = os.environ["NESSUS_API_ACCESS_KEY"]
         secret_key = os.environ["NESSUS_API_SECRET_KEY"]
