@@ -32,7 +32,7 @@ def download_exported_scan():
 
         response_data = response.json()
         download_export_id = response_data["file"]
-        time.sleep(60)
+        time.sleep(30)
         download_url = f"{url}/scans/{scan_id}/export/{download_export_id}/download"
         download_response = requests.get(download_url, headers=headers, verify=False)
         download_response.raise_for_status()
