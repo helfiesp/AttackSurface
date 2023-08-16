@@ -4,10 +4,10 @@ from requests.exceptions import RequestException
 import sys
 
 # Append the path to the 'misc' directory to sys.path
-sys.path.append("/var/csirt/source/scanner/misc")
+sys.path.append("/var/csirt/source/scanner")
 
 # Now you can import the entire 'secrets' module
-import secrets
+from misc import secrets
 
 def download_exported_scan():
     try:
