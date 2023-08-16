@@ -194,32 +194,20 @@ def NessusScan(request):
             "Content-Type": "application/json"
         }
 
-        # Fetch available export formats
-        response = requests.get(f"{url}/scans/{scan_id}/export/formats", headers=headers, verify=False)
+        # Choose the export format "CSV"
+        export_format_value = "csv"
+
+        # Fetch the exported scan file
+        download_url = f"{url}/scans/{scan_id}/export/{export_format_value}/download"
+        response = requests.get(download_url, headers=headers, verify=False)
         response.raise_for_status()
 
-        formats = response.json()
-
-        # Find the export format with name "Nessus"
-        nessus_export_format = next((format_info for format_info in formats.get("export", []) if format_info["name"] == "Nessus"), None)
-
-        if nessus_export_format:
-            # Fetch the exported scan file
-            export_file_id = nessus_export_format.get("value")
-            download_url = f"{url}/scans/{scan_id}/export/{export_file_id}/download"
-            response = requests.get(download_url, headers=headers, verify=False)
-            response.raise_for_status()
-
-            # Return the content of the file as an attachment
-            content = response.content
-            return HttpResponse(content, content_type="application/octet-stream")
-        else:
-            content = "Nessus export format not found."
-            return HttpResponse(content)
+        # Return the content of the file as an attachment
+        content = response.content
+        return HttpResponse(content, content_type="text/csv")
     except RequestException as e:
         content = f"Error: {e}"
         return HttpResponse(content)
-
 
 
 def CheckDomain(request):
