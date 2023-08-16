@@ -2,6 +2,7 @@ import os
 import requests
 from requests.exceptions import RequestException
 import sys
+import time
 
 # Append the path to the 'misc' directory to sys.path
 sys.path.append("/var/csirt/source/scanner")
@@ -31,7 +32,7 @@ def download_exported_scan():
 
         response_data = response.json()
         download_export_id = response_data["file"]
-
+        time.sleep(60)
         download_url = f"{url}/scans/{scan_id}/export/{download_export_id}/download"
         download_response = requests.get(download_url, headers=headers, verify=False)
         download_response.raise_for_status()
