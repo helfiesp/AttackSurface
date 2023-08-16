@@ -203,7 +203,7 @@ def NessusScan(request):
 
         # Find the ID of the desired scan
         for scan in scans:
-            print(scan["id"])
+            print(scan["name"])
             if scan["name"] == scan_name:
                 scan_id = scan["id"]
                 break
