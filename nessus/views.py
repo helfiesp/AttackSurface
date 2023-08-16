@@ -211,8 +211,7 @@ def NessusScan(request):
             # Fetch available export formats
             response = requests.get(f"{url}/scans/{scan_id}/export/formats", headers=headers, verify=False)
             response.raise_for_status()
-
-           formats = response.json()["formats"]
+            formats = response.json()["formats"]
             return JsonResponse(formats)
         else:
             return JsonResponse({"error": f"Scan '{scan_name}' not found."})
