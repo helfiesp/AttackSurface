@@ -183,16 +183,38 @@ def FilterNMAP(nmap_results):
 def NessusScan(request):
     access_key = os.environ["NESSUS_API_ACCESS_KEY"]
     secret_key = os.environ["NESSUS_API_SECRET_KEY"]
-    url = "https://nessus.okcsirt.no/scans"
+    scan_name = "OKDomainsScan"
+    url = f"https://nessus.okcsirt.no/scans"
 
     headers = {
-        "X-ApiKeys": "accessKey={};secretKey={}".format(access_key, secret_key),
+        "X-ApiKeys": f"accessKey={access_key};secretKey={secret_key}",
         "Content-Type": "application/json"
     }
 
     response = requests.get(url, headers=headers, verify=False)
-    print(response.status_code)
-    print(response.text)
+    
+    if response.status_code == 200:
+        scans = response.json()["scans"]
+        scan_id = None
+        for scan in scans:
+            if scan["name"] == scan_name:
+                scan_id = scan["id"]
+                break
+
+        if scan_id is not None:
+            scan_results_url = f"{url}/{scan_id}/results"
+            response = requests.get(scan_results_url, headers=headers, verify=False)
+            
+            if response.status_code == 200:
+                results = response.json()
+                print("Scan Results:")
+                print(results)
+            else:
+                print(f"Error fetching scan results: {response.status_code}")
+        else:
+            print(f"Scan '{scan_name}' not found.")
+    else:
+        print(f"Error fetching scans: {response.status_code}")
 
 
 def CheckDomain(request):
