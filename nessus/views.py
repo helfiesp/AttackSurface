@@ -212,17 +212,14 @@ def NessusScan(request):
             response = requests.get(f"{url}/scans/{scan_id}/export/formats", headers=headers, verify=False)
             response.raise_for_status()
 
-            formats = response.json()["formats"]
-            format_names = [format_info["name"] for format_info in formats]
-            
-            content = "Available Export Formats:\n" + "\n".join(format_names)
+           formats = response.json()["formats"]
+            return JsonResponse(formats)
         else:
-            content = f"Scan '{scan_name}' not found."
+            return JsonResponse({"error": f"Scan '{scan_name}' not found."})
     except RequestException as e:
-        content = f"Error: {e}"
+        return JsonResponse({"error": f"Error: {e}"})
 
     return HttpResponse(content)
-
 
 
 def CheckDomain(request):
