@@ -198,7 +198,7 @@ def NessusScan(request):
         export_format_value = "csv"
 
         # Fetch the exported scan file
-        download_url = f"{url}/scans/{scan_id}/export/{export_format_value}/download"
+        download_url = f"{url}/scans/{scan_id}"
         response = requests.get(download_url, headers=headers, verify=False)
         response.raise_for_status()
 
