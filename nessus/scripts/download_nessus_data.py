@@ -13,9 +13,11 @@ def download_exported_scan():
     try:
         scan_id = 20  # Update this with the actual scan ID
         url = "https://nessus.okcsirt.no"
+        access_key = os.environ["NESSUS_API_ACCESS_KEY"]
+        secret_key = os.environ["NESSUS_API_SECRET_KEY"]
 
         headers = {
-            "X-ApiKeys": f"accessKey={secrets.NESSUS_API_ACCESS_KEY};secretKey={secrets.NESSUS_API_SECRET_KEY}",
+            "X-ApiKeys": f"accessKey={access_key};secretKey={secret_key}",
             "Content-Type": "application/json"
         }
 
