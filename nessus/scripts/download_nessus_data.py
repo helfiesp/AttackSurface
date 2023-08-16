@@ -30,7 +30,7 @@ def download_exported_scan():
         response.raise_for_status()
 
         # Save the content of the file to a local file
-        filename = f"exported_scan_{scan_id}.csv"
+        filename = f"data/exported_scan_{scan_id}.csv"
         with open(filename, "wb") as file:
             file.write(response.content)
 
