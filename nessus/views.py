@@ -208,18 +208,14 @@ def NessusScan(request):
                 break
 
         if scan_id is not None:
-            # Fetch scan results export file ID
-            response = requests.get(f"{url}/scans/{scan_id}/export", headers=headers, verify=False)
+            # Fetch available export formats
+            response = requests.get(f"{url}/scans/{scan_id}/export/formats", headers=headers, verify=False)
             response.raise_for_status()
 
-            export_file_id = response.json()["file"]
+            formats = response.json()["formats"]
+            format_names = [format_info["name"] for format_info in formats]
             
-            # Download the scan results export file
-            download_url = f"{url}/scans/{scan_id}/export/{export_file_id}/download"
-            response = requests.get(download_url, headers=headers, verify=False)
-            response.raise_for_status()
-
-            content = "Scan Results:\n" + response.text
+            content = "Available Export Formats:\n" + "\n".join(format_names)
         else:
             content = f"Scan '{scan_name}' not found."
     except RequestException as e:
