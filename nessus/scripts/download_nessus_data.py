@@ -37,7 +37,7 @@ def download_exported_scan():
         download_response = requests.get(download_url, headers=headers, verify=False)
         download_response.raise_for_status()
 
-        filename = f"data/exported_scan_{scan_id}.csv"
+        filename = f"data/exported_scan_{scan_id}_{download_export_id}.csv"
         with open(filename, "wb") as file:
             file.write(download_response.content)
 
