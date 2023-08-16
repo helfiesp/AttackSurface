@@ -181,6 +181,7 @@ def FilterNMAP(nmap_results):
     return open_ports
 
 def NessusScan(request):
+    from requests.exceptions import RequestException
     try:
         access_key = os.environ["NESSUS_API_ACCESS_KEY"]
         secret_key = os.environ["NESSUS_API_SECRET_KEY"]
@@ -219,7 +220,7 @@ def NessusScan(request):
         content = f"Error: {e}"
 
     return HttpResponse(content)
-    
+
 
 
 def CheckDomain(request):
