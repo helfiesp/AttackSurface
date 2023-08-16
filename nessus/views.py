@@ -186,7 +186,7 @@ def NessusScan(request):
     try:
         access_key = os.environ["NESSUS_API_ACCESS_KEY"]
         secret_key = os.environ["NESSUS_API_SECRET_KEY"]
-        scan_name = "OKDomainsScan"
+        scan_id = 20  # Update this with the actual scan ID
         url = "https://nessus.okcsirt.no"
 
         headers = {
@@ -194,31 +194,32 @@ def NessusScan(request):
             "Content-Type": "application/json"
         }
 
-        # Fetch the list of scans
-        response = requests.get(f"{url}/scans", headers=headers, verify=False)
-        response.raise_for_status()  # Raise an exception if the request was unsuccessful
+        # Fetch available export formats
+        response = requests.get(f"{url}/scans/{scan_id}/export/formats", headers=headers, verify=False)
+        response.raise_for_status()
 
-        scans = response.json()["scans"]
-        scan_id = None
+        formats = response.json()
 
-        # Find the ID of the desired scan
-        for scan in scans:
-            if scan["name"] == scan_name:
-                scan_id = scan["id"]
-                break
+        # Find the export format with name "Nessus"
+        nessus_export_format = next((format_info for format_info in formats.get("export", []) if format_info["name"] == "Nessus"), None)
 
-        if scan_id is not None:
-            # Fetch available export formats
-            response = requests.get(f"{url}/scans/{scan_id}/export/formats", headers=headers, verify=False)
+        if nessus_export_format:
+            # Fetch the exported scan file
+            export_file_id = nessus_export_format.get("value")
+            download_url = f"{url}/scans/{scan_id}/export/{export_file_id}/download"
+            response = requests.get(download_url, headers=headers, verify=False)
             response.raise_for_status()
-            formats = response.json()["formats"]
-            return JsonResponse(formats)
-        else:
-            return JsonResponse({"error": f"Scan '{scan_name}' not found."})
-    except RequestException as e:
-        return JsonResponse({"error": f"Error: {e}"})
 
-    return HttpResponse(content)
+            # Return the content of the file as an attachment
+            content = response.content
+            return HttpResponse(content, content_type="application/octet-stream")
+        else:
+            content = "Nessus export format not found."
+            return HttpResponse(content)
+    except RequestException as e:
+        content = f"Error: {e}"
+        return HttpResponse(content)
+
 
 
 def CheckDomain(request):
