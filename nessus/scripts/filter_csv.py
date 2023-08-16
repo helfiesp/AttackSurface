@@ -1,25 +1,24 @@
 import csv
 import json
+import pandas as pd
 
-def convert_csv_to_json(filename):
-    try:
-        json_objects = []
-        with open(filename, "r") as file:
-            csv_reader = csv.DictReader(file)
-            for row in csv_reader:
-                json_objects.append(row)
-        return json_objects
-    except FileNotFoundError:
-        print("File not found.")
+def IterateCSV(filename):
+    # Iterating through the CSV file to get the dataset.
+    with open(filename, "r") as file:
+        for x in file:
+            data = x
+            break
+
+    # Replacing booleans with python compatible ones as the ones from nessus are not compatible.
+    data = dict(eval(data.replace("false", "False").replace("true", "True").replace("null", "None")))
+
+
+
+    for item in data["info"]:
+        print(item)
+
+    print(data.keys())
 
 if __name__ == "__main__":
-    exported_file = "data/exported_scan_20.csv"  # Update with the actual filename
-    json_objects = convert_csv_to_json(exported_file)
-
-    for obj in json_objects:
-        print(json.dumps(obj, indent=4))  # Print each JSON object with indentation
-
-
-
-
-
+    exported_file = "C:/Users/Helfie/Downloads/scan.csv"  # Update with the actual filename
+    IterateCSV(exported_file)

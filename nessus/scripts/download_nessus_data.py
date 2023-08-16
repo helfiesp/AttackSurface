@@ -18,21 +18,27 @@ def download_exported_scan():
 
         headers = {
             "X-ApiKeys": f"accessKey={access_key};secretKey={secret_key}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/x-www-form-urlencoded"
         }
 
-        # Choose the export format "CSV"
         export_format_value = "csv"
 
-        # Fetch the exported scan file
-        download_url = f"{url}/scans/{scan_id}"
-        response = requests.get(download_url, headers=headers, verify=False)
+        export_url = f"{url}/scans/{scan_id}/export"
+        payload = {"format": export_format_value}
+
+        response = requests.post(export_url, headers=headers, data=payload, verify=False)
         response.raise_for_status()
 
-        # Save the content of the file to a local file
+        response_data = response.json()
+        download_export_id = response_data["file"]
+
+        download_url = f"{url}/scans/{scan_id}/export/{download_export_id}/download"
+        download_response = requests.get(download_url, headers=headers, verify=False)
+        download_response.raise_for_status()
+
         filename = f"data/exported_scan_{scan_id}.csv"
         with open(filename, "wb") as file:
-            file.write(response.content)
+            file.write(download_response.content)
 
         print(f"Exported scan saved as: {filename}")
     except RequestException as e:
