@@ -181,40 +181,45 @@ def FilterNMAP(nmap_results):
     return open_ports
 
 def NessusScan(request):
-    access_key = os.environ["NESSUS_API_ACCESS_KEY"]
-    secret_key = os.environ["NESSUS_API_SECRET_KEY"]
-    scan_name = "OKDomainsScan"
-    url = f"https://nessus.okcsirt.no/scans"
+    try:
+        access_key = os.environ["NESSUS_API_ACCESS_KEY"]
+        secret_key = os.environ["NESSUS_API_SECRET_KEY"]
+        scan_name = "OKDomainsScan"
+        url = "https://nessus.okcsirt.no"
 
-    headers = {
-        "X-ApiKeys": f"accessKey={access_key};secretKey={secret_key}",
-        "Content-Type": "application/json"
-    }
+        headers = {
+            "X-ApiKeys": f"accessKey={access_key};secretKey={secret_key}",
+            "Content-Type": "application/json"
+        }
 
-    response = requests.get(url, headers=headers, verify=False)
-    
-    if response.status_code == 200:
+        # Fetch the list of scans
+        response = requests.get(f"{url}/scans", headers=headers, verify=False)
+        response.raise_for_status()  # Raise an exception if the request was unsuccessful
+
         scans = response.json()["scans"]
         scan_id = None
+
+        # Find the ID of the desired scan
         for scan in scans:
             if scan["name"] == scan_name:
                 scan_id = scan["id"]
                 break
 
         if scan_id is not None:
-            scan_results_url = f"{url}/{scan_id}/results"
+            # Fetch scan results
+            scan_results_url = f"{url}/scans/{scan_id}/results"
             response = requests.get(scan_results_url, headers=headers, verify=False)
-            
-            if response.status_code == 200:
-                results = response.json()
-                print("Scan Results:")
-                print(results)
-            else:
-                print(f"Error fetching scan results: {response.status_code}")
+            response.raise_for_status()  # Raise an exception if the request was unsuccessful
+
+            results = response.json()
+            content = "Scan Results:\n" + str(results)
         else:
-            print(f"Scan '{scan_name}' not found.")
-    else:
-        print(f"Error fetching scans: {response.status_code}")
+            content = f"Scan '{scan_name}' not found."
+    except RequestException as e:
+        content = f"Error: {e}"
+
+    return HttpResponse(content)
+    
 
 
 def CheckDomain(request):
