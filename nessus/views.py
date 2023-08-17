@@ -14,6 +14,10 @@ from django.shortcuts import get_object_or_404
 import socket
 import sqlite3
 from datetime import datetime
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import APIKeys, User
+
 
 
 def index(request):
@@ -355,7 +359,7 @@ def ViewAllOKDomains(request):
         return JsonResponse(okdomains_data, safe=False)
 
 @login_required
-def add_api_key(request):
+def AddApiKey(request):
     if request.method == 'POST':
         key = request.POST.get('key')
         user = request.POST.get('user')
@@ -366,8 +370,8 @@ def add_api_key(request):
         
         return redirect('api_keys')  # Redirect to a view showing all API keys
     
-    users = ['User1', 'User2', 'User3']  # Replace with actual user data
-    authorized_tables = ['Table1', 'Table2', 'Table3']  # Replace with actual table names
+    users = User.objects.values_list('username', flat=True)  # Fetch usernames from User model
+    authorized_tables = APIKeys.objects.values_list('authorized_tables', flat=True).distinct()
     
     context = {
         'users': users,
