@@ -326,7 +326,7 @@ def InsertOKDomain(request):
 
 # API
 
-def APIGetDomain(request, domain):
+def APIGetDomain(request):
     if request.method == 'GET':
         okdomains = OKDomains.objects.all()
 
