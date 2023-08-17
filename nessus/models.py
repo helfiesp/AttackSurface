@@ -16,3 +16,8 @@ class OKDomains(models.Model):
 	nmap = models.TextField(default=None, null=True)
 	ip_data = models.TextField(default=None, null=True)
 	changes_since_last = models.TextField(default=None, null=True)
+
+class APIKeys(models.Model):
+	key = models.TextField(default=None)
+	user = models.TextField(default=None, null=True)
+	authorized_tables = models.TextField(default=None, null=True)
