@@ -333,6 +333,19 @@ def InsertOKDomain(request):
 
 def ViewAllOKDomains(request):
     if request.method == 'GET':
+        api_key_value = request.GET.get('key')  # Get the value of the 'key' parameter
+        
+        if not api_key_value:
+            return JsonResponse({"error": "API key parameter 'key' is required."}, status=400)
+        
+        try:
+            api_key = APIKeys.objects.get(key=api_key_value)  # Check if the API key exists
+        except APIKeys.DoesNotExist:
+            return JsonResponse({"error": "Invalid API key."}, status=401)
+        
+        if api_key.authorized_tables != 'OKDomains':
+            return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
+
         okdomains = OKDomains.objects.all()
 
         # Convert queryset to list of dictionaries
