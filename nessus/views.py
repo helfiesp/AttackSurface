@@ -327,10 +327,10 @@ def InsertOKDomain(request):
 # API
 
 def APIGetDomain(request, domain):
-    print(domain)
+    print("REQUEST METHOD: {}".format(request.method))
     if request.method == 'GET':
         try:
-            data_from_domain = OKDomains.objects.filter(domain=domain).values()
+            data_from_domain = OKDomains.objects.filter(domain=str(domain)).values()
             if not data_from_domain.exists():
                 return JsonResponse({'error': 'No data available for the provided domain'}, status=404)
 
