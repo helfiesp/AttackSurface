@@ -332,8 +332,8 @@ def APIGetDomain(request, domain):
             data_from_domain = OKDomains.objects.filter(domain=domain).values()
             if not data_from_domain.exists():
                 return JsonResponse({'error': 'No data available for the provided domain'}, status=404)
-
-            return JsonResponse(list(data_from_domain), safe=False)
+            context = {'data':data_from_domain}
+            return render(request, 'index.html', context)
         except OKDomains.DoesNotExist:
             return JsonResponse({'error': 'Invalid domain'}, status=400)
 
