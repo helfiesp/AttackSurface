@@ -45,6 +45,7 @@ def AttackSurfaceDomains(request):
             domain_entry.nmap = FilterNMAP(domain_entry.nmap)
         if domain_entry.ip_data:
             domain_entry.ip_data = json.loads(domain_entry.ip_data)
+
     return render(request, 'domains.html', {'okdomains': okdomains})
 
 
@@ -352,3 +353,24 @@ def ViewAllOKDomains(request):
             okdomains_data.append(domain_data)
 
         return JsonResponse(okdomains_data, safe=False)
+
+@login_required
+def add_api_key(request):
+    if request.method == 'POST':
+        key = request.POST.get('key')
+        user = request.POST.get('user')
+        authorized_tables = request.POST.get('authorized_tables')
+        
+        api_key = APIKeys(key=key, user=user, authorized_tables=authorized_tables)
+        api_key.save()
+        
+        return redirect('api_keys')  # Redirect to a view showing all API keys
+    
+    users = ['User1', 'User2', 'User3']  # Replace with actual user data
+    authorized_tables = ['Table1', 'Table2', 'Table3']  # Replace with actual table names
+    
+    context = {
+        'users': users,
+        'authorized_tables': authorized_tables,
+    }
+    return render(request, 'add_api_key.html', context)

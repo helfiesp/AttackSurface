@@ -36,6 +36,7 @@ urlpatterns = [
     path('domains/check', views.CheckDomain,name="check_domain"),
 
     # API
-    path('domains/api/all', views.ViewAllOKDomains, name="ViewAllOKDomains"),
+    path('api/domains/all', views.ViewAllOKDomains, name="ViewAllOKDomains"),
+    path('api/keys/add', views.AddApiKey, name="add_api_key"),
 
 ]

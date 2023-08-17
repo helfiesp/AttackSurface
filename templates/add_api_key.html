@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Add a New API Key</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="key">API Key:</label>
+    <input type="text" name="key" required><br>
+    
+    <label for="user">User:</label>
+    <select name="user" required>
+      <option value="" selected disabled>Select a user</option>
+      {% for user in users %}
+        <option value="{{ user }}">{{ user }}</option>
+      {% endfor %}
+    </select><br>
+    
+    <label for="authorized_tables">Authorized Tables:</label>
+    <select name="authorized_tables" required>
+      <option value="" selected disabled>Select authorized tables</option>
+      {% for table in authorized_tables %}
+        <option value="{{ table }}">{{ table }}</option>
+      {% endfor %}
+    </select><br>
+    
+    <button type="submit">Add API Key</button>
+  </form>
+{% endblock %}
