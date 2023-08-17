@@ -330,8 +330,26 @@ def InsertOKDomain(request):
 
 
 # API
+def APIViewDomain(request, domain):
+    if request.method == 'GET':
+        api_key_value = request.GET.get('key')  # Get the value of the 'key' parameter
+        
+        if not api_key_value:
+            return JsonResponse({"error": "API key parameter 'key' is required."}, status=400)
+        
+        try:
+            api_key = APIKeys.objects.get(key=api_key_value)  # Check if the API key exists
+        except APIKeys.DoesNotExist:
+            return JsonResponse({"error": "Invalid API key."}, status=401)
+        
+        if api_key.authorized_tables != 'OKDomains':
+            return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
 
-def ViewAllOKDomains(request):
+        domain_data = OKDomains.objects.filter(domain=domain).values()
+        return JsonResponse(domain_data, safe=False)
+
+
+def APIViewAllOKDomains(request):
     if request.method == 'GET':
         api_key_value = request.GET.get('key')  # Get the value of the 'key' parameter
         
