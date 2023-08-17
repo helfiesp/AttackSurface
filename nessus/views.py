@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import OKDomains
+from .models import OKDomains, APIKeys
 from .forms import OKDomainsForm
 from nessus import views
 import requests
@@ -16,7 +16,7 @@ import sqlite3
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import APIKeys, User
+
 
 
 
@@ -370,8 +370,8 @@ def AddApiKey(request):
         
         return redirect('api_keys')  # Redirect to a view showing all API keys
     
-    users = User.objects.values_list('username', flat=True)  # Fetch usernames from User model
-    authorized_tables = APIKeys.objects.values_list('authorized_tables', flat=True).distinct()
+    users = User.objects.values_list('username', flat=True)   # Fetch usernames from User model
+    authorized_tables = ['OKDomains']
     
     context = {
         'users': users,
