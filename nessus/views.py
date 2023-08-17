@@ -326,12 +326,29 @@ def InsertOKDomain(request):
 
 # API
 
-def APIGetDomain(request, domain):
+def ViewAllOKDomains(request):
     if request.method == 'GET':
-        data_from_domain = OKDomains.objects.filter(domain=str(domain)).values()
-        if not data_from_domain.exists():
-            return JsonResponse({'error': 'No data available for the provided domain'}, status=404)
+        okdomains = OKDomains.objects.all()
 
-        return JsonResponse(list(data_from_domain), safe=False)
+        # Convert queryset to list of dictionaries
+        okdomains_data = []
+        for domain_entry in okdomains:
+            domain_data = {
+                "domain": domain_entry.domain,
+                "ip": domain_entry.ip,
+                "http_code": domain_entry.http_code,
+                "http_redirect": domain_entry.http_redirect,
+                "registrar": domain_entry.registrar,
+                "server": domain_entry.server,
+                "urlscan": json.loads(domain_entry.urlscan) if domain_entry.urlscan else None,
+                "system": domain_entry.system,
+                "system_owner": domain_entry.system_owner,
+                "comments": domain_entry.comments,
+                "vulnerabilities": domain_entry.vulnerabilities,
+                "nmap": domain_entry.nmap,
+                "ip_data": json.loads(domain_entry.ip_data) if domain_entry.ip_data else None,
+                "changes_since_last": domain_entry.changes_since_last
+            }
+            okdomains_data.append(domain_data)
 
-    return JsonResponse({'error': 'Invalid request'}, status=400) 
+        return JsonResponse(okdomains_data, safe=False)
