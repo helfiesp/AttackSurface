@@ -365,7 +365,7 @@ def ViewAPIKeys(request):
     context = {
         'api_keys': api_keys,
     }
-    return render(request, 'api_keys_list.html', context)
+    return render(request, 'api_keys.html', context)
 
 
 @login_required
