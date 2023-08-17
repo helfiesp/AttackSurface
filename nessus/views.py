@@ -368,7 +368,7 @@ def AddApiKey(request):
         api_key = APIKeys(key=key, user=user, authorized_tables=authorized_tables)
         api_key.save()
         
-        return redirect('api_keys')  # Redirect to a view showing all API keys
+        return render(request, 'add_api_key.html', context)  # Redirect to a view showing all API keys
     
     users = User.objects.values_list('username', flat=True)   # Fetch usernames from User model
     authorized_tables = ['OKDomains']
