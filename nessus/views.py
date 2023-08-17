@@ -345,7 +345,7 @@ def APIViewDomain(request, domain):
         if api_key.authorized_tables != 'OKDomains':
             return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
 
-        domain_data = OKDomains.objects.filter(domain=domain).values()
+        domain_data = list(OKDomains.objects.filter(domain=domain).values())
         return JsonResponse(domain_data, safe=False)
 
 
