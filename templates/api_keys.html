@@ -1,0 +1,12 @@
+<!-- api_keys_list.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>API Keys List</h2>
+  <ul>
+    {% for api_key in api_keys %}
+      <li><strong>Key:</strong> {{ api_key.key }} | <strong>User:</strong> {{ api_key.user }} | <strong>Authorized Tables:</strong> {{ api_key.authorized_tables }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

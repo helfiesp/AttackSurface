@@ -359,6 +359,16 @@ def ViewAllOKDomains(request):
         return JsonResponse(okdomains_data, safe=False)
 
 @login_required
+def ViewAPIKeys(request):
+    api_keys = APIKeys.objects.all()  # Retrieve all APIKeys objects
+    
+    context = {
+        'api_keys': api_keys,
+    }
+    return render(request, 'api_keys_list.html', context)
+
+
+@login_required
 def AddApiKey(request):
     if request.method == 'POST':
         key = request.POST.get('key')
@@ -368,7 +378,7 @@ def AddApiKey(request):
         api_key = APIKeys(key=key, user=user, authorized_tables=authorized_tables)
         api_key.save()
         
-        return render(request, 'add_api_key.html', context)  # Redirect to a view showing all API keys
+        return redirect('all_api_keys')  # Redirect to a view showing all API keys
     
     users = User.objects.values_list('username', flat=True)   # Fetch usernames from User model
     authorized_tables = ['OKDomains']
