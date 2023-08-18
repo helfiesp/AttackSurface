@@ -41,5 +41,7 @@ urlpatterns = [
     path('api/domains/search/<str:domain>', views.APIViewDomain, name="ViewDomain"),
     path('api/keys/add', views.AddApiKey, name="add_api_key"),
     path('api/keys/all', views.ViewAPIKeys, name="all_api_keys"),
+    path('api/nessus/data/all', views.APIViewAllNessusData, name="view_all_nessus_data"),
+
 
 ]

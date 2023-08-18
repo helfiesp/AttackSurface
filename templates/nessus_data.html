@@ -11,24 +11,7 @@
 </head>
 <body>
     <h1>Nessus Scan Data</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Scan ID</th>
-                <th>Data</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for scan_data in nessus_data %}
-            <tr>
-                <td>{{ scan_data.date }}</td>
-                <td>{{ scan_data.scan_id }}</td>
-                <td>{{ scan_data.data }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <pre>{{ nessus_data.data }}</pre>
 </body>
 </html>
 

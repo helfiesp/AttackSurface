@@ -336,7 +336,6 @@ def NessusDataView(request):
     context = {"nessus_data": nessus_data}
     return render(request, "nessus_data.html", context)
 
-
 # API
 
 def authenticate_api(request, authorized_table):
@@ -392,7 +391,27 @@ def APIViewAllOKDomains(request):
             }
             okdomains_data.append(domain_data)
 
+
         return JsonResponse(okdomains_data, safe=False)
+
+def APIViewAllNessusData(request):
+    # API endpoint to retrieve the most recent Nessus scan data
+    if request.method == 'GET':
+        authentication_result = authenticate_api(request, 'NessusData')  # Assuming you have a similar authentication function
+        if authentication_result:
+            return authentication_result
+        
+        most_recent_data = NessusData.objects.order_by('-date').first()
+        if most_recent_data:
+            # Return the most recent Nessus scan data as a JSON response
+            response_data = {
+                "date": most_recent_data.date,
+                "scan_id": most_recent_data.scan_id,
+                "data": most_recent_data.data,
+            }
+            return JsonResponse(response_data)
+        else:
+            return JsonResponse({"message": "No Nessus scan data available."}, status=404)
 
 @login_required
 def ViewAPIKeys(request):
