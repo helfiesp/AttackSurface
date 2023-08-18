@@ -1,5 +1,6 @@
 import os
 import requests
+from datetime import datetime
 from requests.exceptions import RequestException
 import sqlite3
 import sys
