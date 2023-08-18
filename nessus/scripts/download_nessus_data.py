@@ -46,9 +46,12 @@ def download_exported_scan():
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
+        # Get the current date and time
+        current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         # Insert exported scan data into the 'nessus_nessusdata' table
-        insert_query = "INSERT INTO nessus_nessusdata (data, scan_id) VALUES (?, ?);"
-        cursor.execute(insert_query, (exported_scan_data, scan_id))
+        insert_query = "INSERT INTO nessus_nessusdata (data, date, scan_id) VALUES (?, ?, ?);"
+        cursor.execute(insert_query, (exported_scan_data, current_date, scan_id))
         conn.commit()
 
         conn.close()
