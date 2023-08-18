@@ -346,10 +346,12 @@ def authenticate_api(request, authorized_table):
         api_key = APIKeys.objects.get(key=api_key_value)  # Check if the API key exists
     except APIKeys.DoesNotExist:
         return JsonResponse({"error": "Invalid API key."}, status=401)
-    
-    if authorized_table not in api_key.authorized_tables.split(','):
-
-        return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
+    try:
+        if authorized_table not in api_key.authorized_tables.split(','):
+            return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
+    except:
+        if api_key.authorized_tables != authorized_table:
+            return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
     return None  # Authentication successful
 
 def APIViewDomain(request, domain):
