@@ -414,24 +414,27 @@ def APIViewAllNessusData(request):
             return JsonResponse({"message": "No Nessus scan data available."}, status=404)
 
 @login_required
-def ViewAPIKeys(request):
-    if request.method == 'POST':
-        api_key_id = request.POST.get('api_key_id')
-        new_authorized_tables = request.POST.get('new_authorized_tables')
-        
-        # Update the authorized tables field for the specified API key
-        api_key = APIKeys.objects.get(pk=api_key_id)
-        api_key.authorized_tables = new_authorized_tables
-        api_key.save()
-        return redirect('view_api_keys')  # Redirect to the same page to show updated data
-    
-    api_keys = APIKeys.objects.all()  # Retrieve all APIKeys objects
+def view_api_keys(request):
+    api_keys = APIKeys.objects.all()
     
     context = {
         'api_keys': api_keys,
     }
     return render(request, 'api_keys.html', context)
 
+def change_authorized_tables(request, api_key_id):
+    if request.method == 'POST':
+        new_authorized_tables = request.POST.get('new_authorized_tables')
+        
+        # Update the authorized tables field for the specified API key
+        api_key = APIKeys.objects.get(pk=api_key_id)
+        api_key.authorized_tables = new_authorized_tables
+        api_key.save()
+        return redirect('all_api_keys')  # Redirect to the view_api_keys page to show updated data
+    
+    # Redirect to the view_api_keys page if accessed via GET
+    return redirect('all_api_keys')
+    
 
 @login_required
 def AddApiKey(request):
