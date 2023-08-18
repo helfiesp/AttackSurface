@@ -397,7 +397,7 @@ def APIViewAllOKDomains(request):
 def APIViewAllNessusData(request):
     # API endpoint to retrieve the most recent Nessus scan data
     if request.method == 'GET':
-        authentication_result = authenticate_api(request, 'NessusData')  # Assuming you have a similar authentication function
+        authentication_result = authenticate_api(request, 'OKDomains')  # Assuming you have a similar authentication function
         if authentication_result:
             return authentication_result
         
