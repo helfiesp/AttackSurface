@@ -332,8 +332,7 @@ def InsertOKDomain(request):
 # API
 
 def authenticate_api(request, authorized_table):
-    api_key_value = request.META.get('HTTP_KEY')
-    
+    api_key_value = request.META.get('HTTP_KEY') # Checks for a request header called "key"
     if not api_key_value:
         return JsonResponse({"error": "API key is required in the request header."}, status=400)
     try:
@@ -346,6 +345,8 @@ def authenticate_api(request, authorized_table):
     return None  # Authentication successful
 
 def APIViewDomain(request, domain):
+    # Fetches a single domain specified in the request
+    # /api/domains/search/<domain>
     if request.method == 'GET':
         authentication_result = authenticate_api(request, 'OKDomains')
         if authentication_result:
@@ -356,6 +357,7 @@ def APIViewDomain(request, domain):
 
 
 def APIViewAllOKDomains(request):
+    # Fetches all data from the OKDomains table and returns as JSON
     if request.method == 'GET':
         authentication_result = authenticate_api(request, 'OKDomains')
         if authentication_result:
