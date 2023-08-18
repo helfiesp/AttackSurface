@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import OKDomains, APIKeys
+from .models import OKDomains, APIKeys, NessusData
 from .forms import OKDomainsForm
 from nessus import views
 import requests
