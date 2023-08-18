@@ -347,7 +347,8 @@ def authenticate_api(request, authorized_table):
     except APIKeys.DoesNotExist:
         return JsonResponse({"error": "Invalid API key."}, status=401)
     
-    if api_key.authorized_tables != authorized_table:
+    if authorized_table not in api_key.authorized_tables.split(','):
+
         return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
     return None  # Authentication successful
 
@@ -434,7 +435,7 @@ def change_authorized_tables(request, api_key_id):
     
     # Redirect to the view_api_keys page if accessed via GET
     return redirect('all_api_keys')
-    
+
 
 @login_required
 def AddApiKey(request):
