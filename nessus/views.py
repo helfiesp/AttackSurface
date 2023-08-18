@@ -332,10 +332,10 @@ def InsertOKDomain(request):
 # API
 def APIViewDomain(request, domain):
     if request.method == 'GET':
-        api_key_value = request.GET.get('key')  # Get the value of the 'key' parameter
+        api_key_value = request.META.get('HTTP_KEY')  # Get the value of the 'X-API-Key' header
         
         if not api_key_value:
-            return JsonResponse({"error": "API key parameter 'key' is required."}, status=400)
+            return JsonResponse({"error": "API key is required in the request header."}, status=400)
         
         try:
             api_key = APIKeys.objects.get(key=api_key_value)  # Check if the API key exists
