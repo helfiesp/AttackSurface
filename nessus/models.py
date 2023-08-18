@@ -21,3 +21,8 @@ class APIKeys(models.Model):
 	key = models.TextField(default=None)
 	user = models.TextField(default=None, null=True)
 	authorized_tables = models.TextField(default=None, null=True)
+
+class NessusData(models.Model):
+	data = models.TextField(default=None)
+	date = models.TextField(default=None, null=True)
+	scan_id = models.TextField(default=None, null=True)

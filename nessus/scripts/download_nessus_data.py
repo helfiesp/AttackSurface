@@ -1,6 +1,7 @@
 import os
 import requests
 from requests.exceptions import RequestException
+import sqlite3
 import sys
 import time
 
@@ -37,13 +38,27 @@ def download_exported_scan():
         download_response = requests.get(download_url, headers=headers, verify=False)
         download_response.raise_for_status()
 
-        filename = f"/var/csirt/source/scanner/nessus/scripts/data/exported_scan_{scan_id}_{download_export_id}.csv"
-        with open(filename, "wb") as file:
-            file.write(download_response.content)
+        # Convert the downloaded content to a string
+        exported_scan_data = download_response.content.decode("utf-8")
 
-        print(f"Exported scan saved as: {filename}")
+        # Connect to the SQLite database
+        db_path = "/var/csirt/source/scanner/db.sqlite3"
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # Insert exported scan data into the 'nessus_nessusdata' table
+        insert_query = "INSERT INTO nessus_nessusdata (data, scan_id) VALUES (?, ?);"
+        cursor.execute(insert_query, (exported_scan_data, scan_id))
+        conn.commit()
+
+        conn.close()
+
+        print("Exported scan data saved to the database.")
     except RequestException as e:
         print(f"Error: {e}")
+
+
+
 
 if __name__ == "__main__":
     download_exported_scan()
