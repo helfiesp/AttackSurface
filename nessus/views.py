@@ -397,7 +397,7 @@ def APIViewAllOKDomains(request):
 def APIViewAllNessusData(request):
     # API endpoint to retrieve the most recent Nessus scan data
     if request.method == 'GET':
-        authentication_result = authenticate_api(request, 'OKDomains')  # Assuming you have a similar authentication function
+        authentication_result = authenticate_api(request, 'NessusData')  # Assuming you have a similar authentication function
         if authentication_result:
             return authentication_result
         
@@ -415,6 +415,16 @@ def APIViewAllNessusData(request):
 
 @login_required
 def ViewAPIKeys(request):
+    if request.method == 'POST':
+        api_key_id = request.POST.get('api_key_id')
+        new_authorized_tables = request.POST.get('new_authorized_tables')
+        
+        # Update the authorized tables field for the specified API key
+        api_key = APIKeys.objects.get(pk=api_key_id)
+        api_key.authorized_tables = new_authorized_tables
+        api_key.save()
+        return redirect('view_api_keys')  # Redirect to the same page to show updated data
+    
     api_keys = APIKeys.objects.all()  # Retrieve all APIKeys objects
     
     context = {
