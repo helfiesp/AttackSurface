@@ -330,43 +330,38 @@ def InsertOKDomain(request):
 
 
 # API
+
+def authenticate_api(request, authorized_table):
+    api_key_value = request.META.get('HTTP_KEY')
+    
+    if not api_key_value:
+        return JsonResponse({"error": "API key is required in the request header."}, status=400)
+    try:
+        api_key = APIKeys.objects.get(key=api_key_value)  # Check if the API key exists
+    except APIKeys.DoesNotExist:
+        return JsonResponse({"error": "Invalid API key."}, status=401)
+    
+    if api_key.authorized_tables != authorized_table:
+        return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
+    return None  # Authentication successful
+
 def APIViewDomain(request, domain):
     if request.method == 'GET':
-        api_key_value = request.META.get('HTTP_KEY')  # Get the value of the 'X-API-Key' header
+        authentication_result = authenticate_api(request, 'OKDomains')
+        if authentication_result:
+            return authentication_result
         
-        if not api_key_value:
-            return JsonResponse({"error": "API key is required in the request header."}, status=400)
-        
-        try:
-            api_key = APIKeys.objects.get(key=api_key_value)  # Check if the API key exists
-        except APIKeys.DoesNotExist:
-            return JsonResponse({"error": "Invalid API key."}, status=401)
-        
-        if api_key.authorized_tables != 'OKDomains':
-            return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
-
         domain_data = list(OKDomains.objects.filter(domain=domain).values())
         return JsonResponse(domain_data, safe=False)
 
 
 def APIViewAllOKDomains(request):
     if request.method == 'GET':
-        api_key_value = request.GET.get('key')  # Get the value of the 'key' parameter
+        authentication_result = authenticate_api(request, 'OKDomains')
+        if authentication_result:
+            return authentication_result
         
-        if not api_key_value:
-            return JsonResponse({"error": "API key parameter 'key' is required."}, status=400)
-        
-        try:
-            api_key = APIKeys.objects.get(key=api_key_value)  # Check if the API key exists
-        except APIKeys.DoesNotExist:
-            return JsonResponse({"error": "Invalid API key."}, status=401)
-        
-        if api_key.authorized_tables != 'OKDomains':
-            return JsonResponse({"error": "Unauthorized access to this table."}, status=403)
-
         okdomains = OKDomains.objects.all()
-
-        # Convert queryset to list of dictionaries
         okdomains_data = []
         for domain_entry in okdomains:
             domain_data = {
