@@ -328,6 +328,14 @@ def InsertOKDomain(request):
         context = {'form': form}
         return render(request, 'domains_upload.html', context)
 
+def NessusDataView(request):
+    # Retrieve all Nessus scan data from the database
+    nessus_data = NessusData.objects.all()
+    
+    # Pass the data to the template and render the page
+    context = {"nessus_data": nessus_data}
+    return render(request, "nessus_data.html", context)
+
 
 # API
 
