@@ -28,7 +28,7 @@ def load_last_message_ids():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
-    cursor.execute("SELECT channel_link, last_message_id FROM alerts_telegramdataids")
+    cursor.execute("SELECT channel_link, last_message_id FROM nessus_telegramdataids")
     ids = {row[0]: row[1] for row in cursor.fetchall()}
     
     conn.close()
@@ -39,7 +39,7 @@ def save_last_message_ids(ids):
     cursor = conn.cursor()
 
     for channel_link, last_message_id in ids.items():
-        cursor.execute("INSERT OR REPLACE INTO alerts_telegramdataids (channel_link, last_message_id) VALUES (?, ?)", (channel_link, last_message_id))
+        cursor.execute("INSERT OR REPLACE INTO _telegramdataids (channel_link, last_message_id) VALUES (?, ?)", (channel_link, last_message_id))
     
     conn.commit()
     conn.close()
@@ -81,7 +81,7 @@ def insert_messages_into_db(messages, channel_name):
             "Forwarded Date": str(getattr(message.forward, 'date', 'N/A')) if message.forward else 'N/A',
         }
         cursor.execute("""
-            INSERT INTO alerts_telegramdata (channel, message, message_translated, message_data, date_added)
+            INSERT INTO nessus_telegramdata (channel, message, message_translated, message_data, date_added)
             VALUES (?, ?, ?, ?, ?)
         """, (channel_name, message.text, translated_text, json.dumps(data), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
