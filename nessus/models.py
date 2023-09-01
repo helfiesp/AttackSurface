@@ -28,11 +28,11 @@ class NessusData(models.Model):
 	scan_id = models.TextField(default=None, null=True)
 
 class TelegramData(models.Model):
-	channel = models.TextField(default=None)
-	message = models.TextField(default=None)
-	message_translated = models.TextField(default=None)
-	message_data = models.TextField(default=None)
-	date_added = models.TextField(default=None)
+	channel = models.TextField(default=None, null=True)
+	message = models.TextField(default=None, null=True)
+	message_translated = models.TextField(default=None, null=True)
+	message_data = models.TextField(default=None, null=True)
+	date_added = models.TextField(default=None, null=True)
 
 class TelegramDataIDs(models.Model):
     channel_link = models.TextField(unique=True)
