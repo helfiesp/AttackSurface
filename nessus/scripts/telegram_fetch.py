@@ -51,7 +51,11 @@ async def fetch_messages_from_channels():
         for channel_link in CHANNEL_LINKS:
             channel = await client.get_entity(channel_link)
             
-            offset_id = last_message_ids.get(channel_link, None)
+            if channel_link in last_message_ids:
+                offset_id = last_message_ids[channel_link]
+                messages = await client.get_messages(channel, limit=None, offset_id=offset_id)
+            else:
+                messages = await client.get_messages(channel, limit=None)
             messages = await client.get_messages(channel, limit=None, offset_id=offset_id)
             
             if messages:
