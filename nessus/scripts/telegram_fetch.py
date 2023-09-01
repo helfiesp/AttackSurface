@@ -10,7 +10,7 @@ import secrets
 API_ID = os.environ["TELEGRAM_API_ID"]
 API_HASH = os.environ["TELEGRAM_API_HASH"]
 PHONE_NUMBER = os.environ["TELEGRAM_PHONE_NUMBER"]
-DB_PATH = "/var/csirt/source/CVE-WEB/db.sqlite3"
+DB_PATH = "/var/csirt/source/scanner/db.sqlite3"
 
 
 # Channels:
