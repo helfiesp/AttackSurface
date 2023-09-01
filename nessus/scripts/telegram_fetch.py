@@ -4,19 +4,12 @@ import json
 import os
 from datetime import datetime
 from telethon.sync import TelegramClient
-from googletrans import Translator
-import secrets
+from translate import Translator
 
 API_ID = os.environ["TELEGRAM_API_ID"]
 API_HASH = os.environ["TELEGRAM_API_HASH"]
 PHONE_NUMBER = os.environ["TELEGRAM_PHONE_NUMBER"]
 DB_PATH = "/var/csirt/source/scanner/db.sqlite3"
-
-
-# Channels:
-# NoName057
-# DDOSIA Project
-# WeAreKillNET
 
 CHANNEL_LINKS = [
     'https://t.me/noname05716',
@@ -39,7 +32,7 @@ def save_last_message_ids(ids):
     cursor = conn.cursor()
 
     for channel_link, last_message_id in ids.items():
-        cursor.execute("INSERT OR REPLACE INTO _telegramdataids (channel_link, last_message_id) VALUES (?, ?)", (channel_link, last_message_id))
+        cursor.execute("INSERT OR REPLACE INTO nessus_telegramdataids (channel_link, last_message_id) VALUES (?, ?)", (channel_link, last_message_id))
     
     conn.commit()
     conn.close()
@@ -51,14 +44,8 @@ async def fetch_messages_from_channels():
         for channel_link in CHANNEL_LINKS:
             channel = await client.get_entity(channel_link)
             
-            # Set a default value for offset_id
-            offset_id = None
-            
-            if channel_link in last_message_ids:
-                offset_id = last_message_ids[channel_link]
-                messages = await client.get_messages(channel, limit=None, offset_id=offset_id)
-            else:
-                messages = await client.get_messages(channel, limit=None)
+            offset_id = last_message_ids.get(channel_link, 0)
+            messages = await client.get_messages(channel, limit=None, offset_id=offset_id)
             
             if messages:
                 last_message_ids[channel_link] = messages[0].id
@@ -68,14 +55,13 @@ async def fetch_messages_from_channels():
     save_last_message_ids(last_message_ids)
 
 def insert_messages_into_db(messages, channel_name):
-    translator = Translator()
+    translator = Translator(to_lang="en")
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Reverse the messages order so the oldest ones are processed first
     for message in reversed(messages):
-        translated_text = translator.translate(message.text, dest='en').text
+        translated_text = translator.translate(message.text)
         data = {
             "Sender ID": message.sender_id,
             "Username": getattr(message.sender, 'username', 'N/A'),
