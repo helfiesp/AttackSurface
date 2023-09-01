@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from telethon.sync import TelegramClient
 from translate import Translator
+import secrets
 
 API_ID = os.environ["TELEGRAM_API_ID"]
 API_HASH = os.environ["TELEGRAM_API_HASH"]
