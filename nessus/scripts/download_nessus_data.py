@@ -62,7 +62,5 @@ def download_exported_scan():
         print(f"Error: {e}")
 
 
-
-
 if __name__ == "__main__":
     download_exported_scan()
