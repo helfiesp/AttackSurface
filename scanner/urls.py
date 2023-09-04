@@ -32,7 +32,6 @@ urlpatterns = [
     path('domains/update_comments/<int:pk>/', views.UpdateDomainComments, name='update_comments'),
 
     path('nessus/scan', views.NessusScan,name="nessus_scan"),
-    path('telegram/data', views.TelegramDataView,name="telegram_data_view"),
 
     path('domains/check', views.CheckDomain,name="check_domain"),
 
@@ -43,7 +42,7 @@ urlpatterns = [
     path('api/keys/all', views.view_api_keys, name="all_api_keys"),
     path('api/keys/change_authorized_table/<int:api_key_id>/', views.change_authorized_tables, name='change_authorized_tables'),
     path('api/nessus/data/all', views.APIViewAllNessusData, name="view_all_nessus_data"),
-    path('api/temegram/all', views.APIViewAllTelegramData, name="ViewAllTelegramData"),
+    path('api/telegram/all', views.APIViewAllTelegramData, name="ViewAllTelegramData"),
 
 
 
