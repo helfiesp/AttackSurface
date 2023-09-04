@@ -17,6 +17,8 @@ CHANNEL_LINKS = [
     'https://t.me/killnetl'
 ]
 
+keywords = ['oslo', 'norge', 'Норвегия', 'Осло', 'Норвежский', 'oslo.kommune.no']
+
 def load_last_message_ids():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
