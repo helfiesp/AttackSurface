@@ -72,7 +72,7 @@ def insert_messages_into_db(messages, channel_name):
         }
         cursor.execute("""
             INSERT INTO nessus_telegramdata (channel, message, message_data, date_added)
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?)
         """, (channel_name, message.text, json.dumps(data), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     conn.commit()
