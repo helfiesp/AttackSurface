@@ -4,7 +4,6 @@ import json
 import os
 from datetime import datetime
 from telethon.sync import TelegramClient
-from translate import Translator
 import secrets
 
 API_ID = os.environ["TELEGRAM_API_ID"]
@@ -56,13 +55,11 @@ async def fetch_messages_from_channels():
     save_last_message_ids(last_message_ids)
 
 def insert_messages_into_db(messages, channel_name):
-    translator = Translator(to_lang="en")
     
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     for message in reversed(messages):
-        translated_text = translator.translate(message.text)
         data = {
             "Sender ID": message.sender_id,
             "Username": getattr(message.sender, 'username', 'N/A'),
@@ -74,9 +71,9 @@ def insert_messages_into_db(messages, channel_name):
             "Forwarded Date": str(getattr(message.forward, 'date', 'N/A')) if message.forward else 'N/A',
         }
         cursor.execute("""
-            INSERT INTO nessus_telegramdata (channel, message, message_translated, message_data, date_added)
+            INSERT INTO nessus_telegramdata (channel, message, message_data, date_added)
             VALUES (?, ?, ?, ?, ?)
-        """, (channel_name, message.text, translated_text, json.dumps(data), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        """, (channel_name, message.text, json.dumps(data), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
     conn.commit()
     conn.close()
