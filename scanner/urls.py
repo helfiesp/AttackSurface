@@ -33,6 +33,7 @@ urlpatterns = [
 
     path('nessus/scan', views.NessusScan,name="nessus_scan"),
     path('nessus/data', views.NessusDataView,name="nessus_data_view"),
+    path('telegram/data', views.TelegramDataView,name="telegram_data_view"),
 
     path('domains/check', views.CheckDomain,name="check_domain"),
 

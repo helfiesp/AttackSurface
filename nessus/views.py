@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import OKDomains, APIKeys, NessusData
+from .models import OKDomains, APIKeys, NessusData, TelegramData
 from .forms import OKDomainsForm
 from nessus import views
 import requests
@@ -334,6 +334,15 @@ def NessusDataView(request):
     context = {"nessus_data": nessus_data}
     return render(request, "nessus_data.html", context)
 
+def TelegramDataView(request):
+    # Retrieve all Nessus scan data from the database
+    telegram_data = TelegramData.objects.all()
+    
+    # Pass the data to the template and render the page
+    context = {"telegram_data": telegram_data}
+    return render(request, "telegram.html", context)
+
+
 # API
 
 def authenticate_api(request, authorized_table):
@@ -457,3 +466,5 @@ def AddApiKey(request):
         'authorized_tables': authorized_tables,
     }
     return render(request, 'add_api_key.html', context)
+
+
