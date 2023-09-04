@@ -468,3 +468,26 @@ def AddApiKey(request):
     return render(request, 'add_api_key.html', context)
 
 
+def APIViewAllTelegramData(request):
+    # Fetches all data from the TelegramData table and returns as JSON
+    if request.method == 'GET':
+        # Assuming you want the same authentication for this API as well.
+        authentication_result = authenticate_api(request, 'TelegramData')
+        if authentication_result:
+            return authentication_result
+
+        telegram_data_entries = TelegramData.objects.all()
+        telegram_data_json = []
+
+        for telegram_entry in telegram_data_entries:
+            entry_data = {
+                "channel": telegram_entry.channel,
+                "message": telegram_entry.message,
+                "message_translated": telegram_entry.message_translated,
+                "message_data": telegram_entry.message_data,
+                "date_added": telegram_entry.date_added,
+                # Extend with other fields if necessary
+            }
+            telegram_data_json.append(entry_data)
+
+        return JsonResponse(telegram_data_json, safe=False)
