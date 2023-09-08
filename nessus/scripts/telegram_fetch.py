@@ -3,6 +3,7 @@ import sqlite3
 import json
 import os
 from datetime import datetime
+sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 from telethon.sync import TelegramClient
 
