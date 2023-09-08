@@ -49,6 +49,10 @@ def fetch_messages_from_channels(client):
 
         messages = client.get_messages(channel, limit=None, offset_id=offset_id)
 
+        # Skip the first message if offset_id is used
+        if offset_id != 0 and messages:
+            messages = messages[1:]
+
         insert_messages_into_db(messages, channel.title)
         new_messages_count = count_existing_messages(channel.title) - existing_messages_count
 
@@ -57,6 +61,7 @@ def fetch_messages_from_channels(client):
 
         if messages:
             save_last_message_id(channel_link, messages[0].id)
+            
 
 def insert_messages_into_db(messages, channel_name):
     conn = sqlite3.connect(DB_PATH)
