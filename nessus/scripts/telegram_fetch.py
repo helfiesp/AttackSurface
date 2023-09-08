@@ -3,6 +3,7 @@ import sqlite3
 import json
 import os
 from datetime import datetime
+from misc import secrets
 from telethon.sync import TelegramClient
 
 API_ID = os.environ["TELEGRAM_API_ID"]
