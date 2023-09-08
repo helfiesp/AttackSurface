@@ -1,10 +1,9 @@
-import asyncio
 import sqlite3
 import json
 import os
 from datetime import datetime
-import secrets
 from telethon.sync import TelegramClient
+import secrets
 
 API_ID = os.environ["TELEGRAM_API_ID"]
 API_HASH = os.environ["TELEGRAM_API_HASH"]
@@ -40,25 +39,24 @@ def count_existing_messages(channel_name):
     conn.close()
     return count
 
-async def fetch_messages_from_channels():
+def fetch_messages_from_channels(client):
     last_message_ids = load_last_message_ids()
 
-    async with TelegramClient('anon', API_ID, API_HASH) as client:
-        for channel_link in CHANNEL_LINKS:
-            channel = await client.get_entity(channel_link)
-            offset_id = last_message_ids.get(channel_link, 0)
-            existing_messages_count = count_existing_messages(channel.title)
+    for channel_link in CHANNEL_LINKS:
+        channel = client.get_entity(channel_link)
+        offset_id = last_message_ids.get(channel_link, 0)
+        existing_messages_count = count_existing_messages(channel.title)
 
-            messages = await client.get_messages(channel, limit=None, offset_id=offset_id)
+        messages = client.get_messages(channel, limit=None, offset_id=offset_id)
 
-            insert_messages_into_db(messages, channel.title)
-            new_messages_count = count_existing_messages(channel.title) - existing_messages_count
+        insert_messages_into_db(messages, channel.title)
+        new_messages_count = count_existing_messages(channel.title) - existing_messages_count
 
-            print(f"Total messages fetched from {channel_link}: {len(messages)}")
-            print(f"New messages added to the database: {new_messages_count}")
+        print(f"Total messages fetched from {channel_link}: {len(messages)}")
+        print(f"New messages added to the database: {new_messages_count}")
 
-            if messages:
-                save_last_message_id(channel_link, messages[0].id)
+        if messages:
+            save_last_message_id(channel_link, messages[0].id)
 
 def insert_messages_into_db(messages, channel_name):
     conn = sqlite3.connect(DB_PATH)
@@ -83,4 +81,6 @@ def insert_messages_into_db(messages, channel_name):
     conn.commit()
     conn.close()
 
-asyncio.run(fetch_messages_from_channels())
+if __name__ == "__main__":
+    with TelegramClient('anon', API_ID, API_HASH) as client:
+        fetch_messages_from_channels(client)
