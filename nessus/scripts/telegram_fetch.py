@@ -46,8 +46,13 @@ def fetch_messages_from_channels(client):
         try:
             channel = client.get_entity(channel_link)
             
-            min_id = last_message_ids.get(channel_link, 0)
             existing_messages_count = count_existing_messages(channel.title)
+
+            # If there are no existing messages in the database for the channel, set min_id to 0
+            if existing_messages_count == 0:
+                min_id = 0
+            else:
+                min_id = last_message_ids.get(channel_link, 0)
             
             messages = client.get_messages(channel, limit=None, min_id=min_id)
             
@@ -65,6 +70,7 @@ def fetch_messages_from_channels(client):
         
         except Exception as e:
             print(f"Error processing channel {channel_link}: {e}")
+
 
 def insert_messages_into_db(messages, channel_name):
     conn = sqlite3.connect(DB_PATH)
