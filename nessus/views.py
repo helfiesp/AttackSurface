@@ -480,7 +480,9 @@ def APIViewAllTelegramData(request):
             entry_data = {
                 "channel": telegram_entry.channel,
                 "message": telegram_entry.message,
+                "message_id": telegram_entry.message_id,
                 "message_data": telegram_entry.message_data,
+                "message_date": telegram_entry.message_date,
                 "date_added": telegram_entry.date_added,
                 # Extend with other fields if necessary
             }
