@@ -77,7 +77,11 @@ def insert_messages_into_db(messages, channel_name):
             VALUES (?, ?, ?, ?)
         """, (channel_name, message.text, json.dumps(data), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
+        # Print to console
+        print(f"New entry added at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, with message ID: {message.id}")
+
     conn.commit()
     conn.close()
+
 
 asyncio.run(fetch_messages_from_channels())

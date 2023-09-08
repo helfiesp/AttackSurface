@@ -47,7 +47,6 @@ def AttackSurfaceDomains(request):
             domain_entry.nmap = FilterNMAP(domain_entry.nmap)
         if domain_entry.ip_data:
             domain_entry.ip_data = json.loads(domain_entry.ip_data)
-
     return render(request, 'domains.html', {'okdomains': okdomains})
 
 
@@ -400,8 +399,6 @@ def APIViewAllOKDomains(request):
                 "changes_since_last": domain_entry.changes_since_last
             }
             okdomains_data.append(domain_data)
-
-
         return JsonResponse(okdomains_data, safe=False)
 
 def APIViewAllNessusData(request):
