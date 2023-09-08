@@ -44,26 +44,24 @@ def fetch_messages_from_channels(client):
 
     for channel_link in CHANNEL_LINKS:
         channel = client.get_entity(channel_link)
-        offset_id = last_message_ids.get(channel_link, 0)
+        
+        min_id = last_message_ids.get(channel_link, 0)
         existing_messages_count = count_existing_messages(channel.title)
-
-        if offset_id:
-            latest_message = client.get_messages(channel, limit=1, offset_id=offset_id)
-            if latest_message:
-                offset_id = latest_message[0].id - 1
-            else:
-                offset_id = 0
-
-        messages = client.get_messages(channel, limit=None, offset_id=offset_id)
-
+        
+        messages = client.get_messages(channel, limit=None, min_id=min_id)
+        
         insert_messages_into_db(messages, channel.title)
+        
         new_messages_count = count_existing_messages(channel.title) - existing_messages_count
-
+        
         print(f"Total messages fetched from {channel_link}: {len(messages)}")
         print(f"New messages added to the database: {new_messages_count}")
 
         if messages:
-            save_last_message_id(channel_link, messages[0].id)
+            # Save the highest message ID for the next iteration.
+            max_id = max([msg.id for msg in messages])
+            save_last_message_id(channel_link, max_id)
+
 
             
 
