@@ -17,8 +17,6 @@ CHANNEL_LINKS = [
     'https://t.me/killnetl'
 ]
 
-keywords = ['oslo', 'norge', 'Норвегия', 'Осло', 'Норвежский', 'oslo.kommune.no']
-
 def load_last_message_ids():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -29,13 +27,10 @@ def load_last_message_ids():
     conn.close()
     return ids
 
-def save_last_message_ids(ids):
+def save_last_message_id(channel_link, last_message_id):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-
-    for channel_link, last_message_id in ids.items():
-        cursor.execute("INSERT OR REPLACE INTO nessus_telegramdataids (channel_link, last_message_id) VALUES (?, ?)", (channel_link, last_message_id))
-    
+    cursor.execute("INSERT OR REPLACE INTO nessus_telegramdataids (channel_link, last_message_id) VALUES (?, ?)", (channel_link, last_message_id))
     conn.commit()
     conn.close()
 
@@ -48,16 +43,14 @@ async def fetch_messages_from_channels():
             
             offset_id = last_message_ids.get(channel_link, 0)
             messages = await client.get_messages(channel, limit=None, offset_id=offset_id)
-
-            if messages:
-                last_message_ids[channel_link] = messages[0].id
             print(f"Number of messages fetched from {channel_link}: {len(messages)}")
 
-            insert_messages_into_db(messages, channel.title)
-    save_last_message_ids(last_message_ids)
+            if messages:
+                insert_messages_into_db(messages, channel.title)
+                # Update the last_message_id for the channel once all messages have been stored
+                save_last_message_id(channel_link, messages[0].id)
 
 def insert_messages_into_db(messages, channel_name):
-    
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
@@ -73,15 +66,14 @@ def insert_messages_into_db(messages, channel_name):
             "Forwarded Date": str(getattr(message.forward, 'date', 'N/A')) if message.forward else 'N/A',
         }
         cursor.execute("""
-        INSERT INTO nessus_telegramdata (channel, message, message_data, message_id, message_date, date_added)
-        VALUES (?, ?, ?, ?, ?, ?)""", (channel_name, message.text, json.dumps(data), message.id, str(message.date), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-
+            INSERT INTO nessus_telegramdata (channel, message, message_data, message_id, message_date, date_added)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (channel_name, message.text, json.dumps(data), message.id, str(message.date), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
         # Print to console
         print(f"New entry added at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, with message ID: {message.id} and date {message.date}")
 
     conn.commit()
     conn.close()
-
 
 asyncio.run(fetch_messages_from_channels())
