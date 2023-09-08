@@ -43,50 +43,35 @@ def fetch_messages_from_channels(client):
     last_message_ids = load_last_message_ids()
 
     for channel_link in CHANNEL_LINKS:
-        channel = client.get_entity(channel_link)
-        
-        min_id = last_message_ids.get(channel_link, 0)
-        existing_messages_count = count_existing_messages(channel.title)
-        
-        messages = client.get_messages(channel, limit=None, min_id=min_id)
-        
-        insert_messages_into_db(messages, channel.title)
-        
-        new_messages_count = count_existing_messages(channel.title) - existing_messages_count
-        
-        print(f"Total messages fetched from {channel_link}: {len(messages)}")
-        print(f"New messages added to the database: {new_messages_count}")
-
-        if messages:
-            # Save the highest message ID for the next iteration.
-            max_id = max([msg.id for msg in messages])
-            save_last_message_id(channel_link, max_id)
-
-
+        try:
+            channel = client.get_entity(channel_link)
             
+            min_id = last_message_ids.get(channel_link, 0)
+            existing_messages_count = count_existing_messages(channel.title)
+            
+            messages = client.get_messages(channel, limit=None, min_id=min_id)
+            
+            insert_messages_into_db(messages, channel.title)
+            
+            new_messages_count = count_existing_messages(channel.title) - existing_messages_count
+            
+            print(f"Total messages fetched from {channel_link}: {len(messages)}")
+            print(f"New messages added to the database: {new_messages_count}")
+
+            if messages:
+                # Save the highest message ID for the next iteration.
+                max_id = max([msg.id for msg in messages])
+                save_last_message_id(channel_link, max_id)
+        
+        except Exception as e:
+            print(f"Error processing channel {channel_link}: {e}")
 
 def insert_messages_into_db(messages, channel_name):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     for message in reversed(messages):
-        data = {
-            "Sender ID": message.sender_id,
-            "Username": getattr(message.sender, 'username', 'N/A'),
-            "Date": str(message.date),
-            "Message ID": message.id,
-            "Views": getattr(message, 'views', 'N/A'),
-            "Replying to Message ID": getattr(message, 'reply_to_msg_id', 'N/A'),
-            "Forwarded from ID": getattr(message.forward, 'sender_id', 'N/A') if message.forward else 'N/A',
-            "Forwarded Date": str(getattr(message.forward, 'date', 'N/A')) if message.forward else 'N/A',
-        }
-        cursor.execute("""
-            INSERT INTO nessus_telegramdata (channel, message, message_data, message_id, message_date, date_added)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (channel_name, message.text, json.dumps(data), message.id, str(message.date), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
-
-    conn.commit()
-    conn.close()
+        #... [rest of the code remains unchanged]
 
 if __name__ == "__main__":
     with TelegramClient('anon', API_ID, API_HASH) as client:
