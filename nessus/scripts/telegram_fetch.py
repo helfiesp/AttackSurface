@@ -47,11 +47,14 @@ def fetch_messages_from_channels(client):
         offset_id = last_message_ids.get(channel_link, 0)
         existing_messages_count = count_existing_messages(channel.title)
 
-        messages = client.get_messages(channel, limit=None, offset_id=offset_id)
+        if offset_id:
+            latest_message = client.get_messages(channel, limit=1, offset_id=offset_id)
+            if latest_message:
+                offset_id = latest_message[0].id - 1
+            else:
+                offset_id = 0
 
-        # Skip the first message if offset_id is used
-        if offset_id != 0 and messages:
-            messages = messages[1:]
+        messages = client.get_messages(channel, limit=None, offset_id=offset_id)
 
         insert_messages_into_db(messages, channel.title)
         new_messages_count = count_existing_messages(channel.title) - existing_messages_count
@@ -61,6 +64,7 @@ def fetch_messages_from_channels(client):
 
         if messages:
             save_last_message_id(channel_link, messages[0].id)
+
             
 
 def insert_messages_into_db(messages, channel_name):
