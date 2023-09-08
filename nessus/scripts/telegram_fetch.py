@@ -13,7 +13,7 @@ DB_PATH = "/var/csirt/source/scanner/db.sqlite3"
 CHANNEL_LINKS = [
     'https://t.me/+fiTz615tQ6BhZWFi',
     'https://t.me/noname05716',
-    'https://t.me/+WbxvP88W9ec3M2Ey',
+    'https://t.me/killnet_reservs',
 ]
 
 def load_last_message_ids():
