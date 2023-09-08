@@ -11,8 +11,8 @@ PHONE_NUMBER = os.environ["TELEGRAM_PHONE_NUMBER"]
 DB_PATH = "/var/csirt/source/scanner/db.sqlite3"
 
 CHANNEL_LINKS = [
-    'https://t.me/killnetl',
     'https://t.me/noname05716',
+    'https://t.me/killnetl',
     'https://t.me/+fiTz615tQ6BhZWFi'
 ]
 
