@@ -71,7 +71,24 @@ def insert_messages_into_db(messages, channel_name):
     cursor = conn.cursor()
 
     for message in reversed(messages):
-        #... [rest of the code remains unchanged]
+        data = {
+            "Sender ID": message.sender_id,
+            "Username": getattr(message.sender, 'username', 'N/A'),
+            "Date": str(message.date),
+            "Message ID": message.id,
+            "Views": getattr(message, 'views', 'N/A'),
+            "Replying to Message ID": getattr(message, 'reply_to_msg_id', 'N/A'),
+            "Forwarded from ID": getattr(message.forward, 'sender_id', 'N/A') if message.forward else 'N/A',
+            "Forwarded Date": str(getattr(message.forward, 'date', 'N/A')) if message.forward else 'N/A',
+        }
+        cursor.execute("""
+            INSERT INTO nessus_telegramdata (channel, message, message_data, message_id, message_date, date_added)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (channel_name, message.text, json.dumps(data), message.id, str(message.date), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+
+    conn.commit()
+    conn.close()
+
 
 if __name__ == "__main__":
     with TelegramClient('anon', API_ID, API_HASH) as client:
