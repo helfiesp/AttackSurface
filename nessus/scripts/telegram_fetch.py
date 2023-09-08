@@ -72,10 +72,11 @@ def insert_messages_into_db(messages, channel_name):
             "Forwarded from ID": getattr(message.forward, 'sender_id', 'N/A') if message.forward else 'N/A',
             "Forwarded Date": str(getattr(message.forward, 'date', 'N/A')) if message.forward else 'N/A',
         }
-        cursor.execute("""
-            INSERT INTO nessus_telegramdata (channel, message, message_data, message_id, message_date, date_added)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (channel_name, message.text, json.dumps(data), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+            cursor.execute("""
+        INSERT INTO nessus_telegramdata (channel, message, message_data, message_id, message_date, date_added)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (channel_name, message.text, json.dumps(data), message.id, str(message.date), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+
 
         # Print to console
         print(f"New entry added at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, with message ID: {message.id} and date {message.date}")
