@@ -48,12 +48,10 @@ async def fetch_messages_from_channels():
             
             offset_id = last_message_ids.get(channel_link, 0)
             messages = await client.get_messages(channel, limit=None, offset_id=offset_id)
-            
+
             if messages:
                 last_message_ids[channel_link] = messages[0].id
-            
             insert_messages_into_db(messages, channel.title)
-
     save_last_message_ids(last_message_ids)
 
 def insert_messages_into_db(messages, channel_name):
@@ -78,7 +76,7 @@ def insert_messages_into_db(messages, channel_name):
         """, (channel_name, message.text, json.dumps(data), datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
 
         # Print to console
-        print(f"New entry added at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, with message ID: {message.id}")
+        print(f"New entry added at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}, with message ID: {message.id} and date {message.date}")
 
     conn.commit()
     conn.close()
