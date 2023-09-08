@@ -51,6 +51,8 @@ async def fetch_messages_from_channels():
 
             if messages:
                 last_message_ids[channel_link] = messages[0].id
+            print(f"Number of messages fetched from {channel_link}: {len(messages)}")
+
             insert_messages_into_db(messages, channel.title)
     save_last_message_ids(last_message_ids)
 
