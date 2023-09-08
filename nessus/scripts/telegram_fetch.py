@@ -69,8 +69,11 @@ def fetch_messages_from_channels(client):
 def insert_messages_into_db(messages, channel_name):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-
+    count = 0
+    total_length = len(messages)
     for message in reversed(messages):
+        count += 1
+        print("[{}] {} out of {} messages added".format(channel_name, count, total_length))
         data = {
             "Sender ID": message.sender_id,
             "Username": getattr(message.sender, 'username', 'N/A'),
