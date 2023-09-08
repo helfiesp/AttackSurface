@@ -31,6 +31,8 @@ class TelegramData(models.Model):
 	channel = models.TextField(default=None, null=True)
 	message = models.TextField(default=None, null=True)
 	message_data = models.TextField(default=None, null=True)
+	message_id = models.TextField(default=None, null=True)
+	message_date = models.TextField(default=None, null=True)
 	date_added = models.TextField(default=None, null=True)
 
 class TelegramDataIDs(models.Model):
