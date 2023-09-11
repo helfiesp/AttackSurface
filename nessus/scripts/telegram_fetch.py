@@ -77,7 +77,7 @@ def insert_messages_into_db(messages, channel_name):
     cursor = conn.cursor()
     count = 0
     total_length = len(messages)
-    for message in reversed(messages):
+    for message in messages:
         count += 1
         print("[{}] {} out of {} messages added".format(channel_name, count, total_length))
         data = {
