@@ -41,6 +41,13 @@ def count_existing_messages(channel_name):
 
 def fetch_messages_from_channels(client):
     last_message_ids = load_last_message_ids()
+    
+    # Initialize a summary dictionary
+    summary = {
+        "channels_scanned": [],
+        "new_messages": {},
+        "start_time": datetime.now(),
+    }
 
     for channel_link in CHANNEL_LINKS:
         try:
@@ -60,8 +67,9 @@ def fetch_messages_from_channels(client):
             
             new_messages_count = count_existing_messages(channel.title) - existing_messages_count
             
-            print(f"Total messages fetched from {channel_link}: {len(messages)}")
-            print(f"New messages added to the database: {new_messages_count}")
+            # Update the summary dictionary
+            summary["channels_scanned"].append(channel.title)
+            summary["new_messages"][channel.title] = new_messages_count
 
             if messages:
                 # Save the highest message ID for the next iteration.
@@ -70,6 +78,23 @@ def fetch_messages_from_channels(client):
         
         except Exception as e:
             print(f"Error processing channel {channel_link}: {e}")
+
+    # Compute and display the summary
+    summary["end_time"] = datetime.now()
+    summary["duration"] = str(summary["end_time"] - summary["start_time"])
+    display_summary(summary)
+
+def display_summary(summary):
+    print("\nSummary of the Script:")
+    print("======================")
+    print(f"Total channels scanned: {len(summary['channels_scanned'])}")
+    print("Channels:")
+    for channel in summary["channels_scanned"]:
+        print(f"  - {channel}")
+    print("\nNew messages per channel:")
+    for channel, count in summary["new_messages"].items():
+        print(f"  - {channel}: {count} new messages")
+    print(f"\nDuration of the script: {summary['duration']}")
 
 
 def insert_messages_into_db(messages, channel_name):
