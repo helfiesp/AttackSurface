@@ -4,7 +4,7 @@ import sys
 sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
-def get_nessus_scan_ids():
+def get_nessus_scan_ids_and_names():
     # API endpoint to fetch the list of scans
     endpoint = "/scans"
     
