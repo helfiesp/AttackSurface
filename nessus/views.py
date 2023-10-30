@@ -401,14 +401,18 @@ def APIViewAllOKDomains(request):
             okdomains_data.append(domain_data)
         return JsonResponse(okdomains_data, safe=False)
 
+
+def ViewNessusData(scan_id):
+
+
 def APIViewAllNessusData(request):
-    # API endpoint to retrieve the most recent Nessus scan data
+    # API endpoint to retrieve the most recent Nessus scan data with scan_id == 20
     if request.method == 'GET':
         authentication_result = authenticate_api(request, 'NessusData')  # Assuming you have a similar authentication function
         if authentication_result:
             return authentication_result
         
-        most_recent_data = NessusData.objects.order_by('-date').first()
+        most_recent_data = NessusData.objects.filter(scan_id=20).order_by('-date').first()
         if most_recent_data:
             # Return the most recent Nessus scan data as a JSON response
             response_data = {
@@ -418,7 +422,30 @@ def APIViewAllNessusData(request):
             }
             return JsonResponse(response_data)
         else:
-            return JsonResponse({"message": "No Nessus scan data available."}, status=404)
+            return JsonResponse({"message": "No Nessus scan data available for scan_id 20."}, status=404)
+
+
+
+def APIViewAllNessusDataIPs(request):
+    # API endpoint to retrieve the most recent Nessus scan data with scan_id == 20
+    if request.method == 'GET':
+        authentication_result = authenticate_api(request, 'NessusData')  # Assuming you have a similar authentication function
+        if authentication_result:
+            return authentication_result
+        
+        most_recent_data = NessusData.objects.filter(scan_id=111).order_by('-date').first()
+        if most_recent_data:
+            # Return the most recent Nessus scan data as a JSON response
+            response_data = {
+                "date": most_recent_data.date,
+                "scan_id": most_recent_data.scan_id,
+                "data": most_recent_data.data,
+            }
+            return JsonResponse(response_data)
+        else:
+            return JsonResponse({"message": "No Nessus scan data available for scan_id 20."}, status=404)
+
+
 
 @login_required
 def view_api_keys(request):

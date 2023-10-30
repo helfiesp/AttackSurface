@@ -42,6 +42,7 @@ urlpatterns = [
     path('api/keys/all', views.view_api_keys, name="all_api_keys"),
     path('api/keys/change_authorized_table/<int:api_key_id>/', views.change_authorized_tables, name='change_authorized_tables'),
     path('api/nessus/data/all', views.APIViewAllNessusData, name="view_all_nessus_data"),
+    path('api/nessus/data/all_ips', views.APIViewAllNessusDataIPS, name="view_all_nessus_data_ips"),
     path('api/telegram/all', views.APIViewAllTelegramData, name="ViewAllTelegramData"),
 
 
