@@ -11,7 +11,7 @@ sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
 
-scan_ids = [20]
+scan_ids = [20, 111]
 
 def download_exported_scan():
     try:
