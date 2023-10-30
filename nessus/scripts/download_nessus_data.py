@@ -5,11 +5,10 @@ from requests.exceptions import RequestException
 import sqlite3
 import sys
 import time
-from misc import secrets
 
 # Append the path to the 'misc' directory to sys.path
 sys.path.append("/var/csirt/source/scanner")
-
+from misc import secrets
 
 
 scan_ids = [20]
