@@ -34,4 +34,4 @@ if __name__ == "__main__":
         for scan in scan_data:
             print(f"Scan ID: {scan['id']} | Scan Name: {scan['name']}")
     else:
-        print("Failed to fetch scan details"
+        print("Failed to fetch scan details")
