@@ -1,5 +1,6 @@
 import os
 import requests
+sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
 def get_nessus_scan_ids():
