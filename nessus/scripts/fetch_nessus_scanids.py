@@ -1,5 +1,6 @@
 import os
 import requests
+import sys
 sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
