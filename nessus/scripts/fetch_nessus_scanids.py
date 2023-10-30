@@ -22,17 +22,16 @@ def get_nessus_scan_ids():
     
     if response.status_code == 200:
         scans = response.json()["scans"]
-        scan_ids = [scan["id"] for scan in scans]
-        return scan_ids
+        scan_data = [{"id": scan["id"], "name": scan["name"]} for scan in scans]
+        return scan_data
     else:
         print(f"Error: {response.status_code} - {response.text}")
         return None
 
 if __name__ == "__main__":
-    scan_ids = get_nessus_scan_ids()
-    if scan_ids:
-        for id in scan_ids:
-            print(f"Scan ID: {id}")
+    scan_data = get_nessus_scan_ids_and_names()
+    if scan_data:
+        for scan in scan_data:
+            print(f"Scan ID: {scan['id']} | Scan Name: {scan['name']}")
     else:
-        print("Failed to fetch scan IDs")
-
+        print("Failed to fetch scan details"
