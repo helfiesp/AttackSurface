@@ -425,7 +425,7 @@ def APIViewAllNessusData(request):
         return get_nessus_data_by_scan_id(request, 20)
 
 
-def APIViewAllNessusDataIPs(request):
+def APIViewAllNessusDataIPS(request):
     if request.method == 'GET':
         return get_nessus_data_by_scan_id(request, 111)
 
