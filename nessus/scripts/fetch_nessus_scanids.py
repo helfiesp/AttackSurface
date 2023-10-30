@@ -18,7 +18,7 @@ def get_nessus_scan_ids():
         "Content-Type": "application/x-www-form-urlencoded"
     }
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=headers, verify=False)
     
     if response.status_code == 200:
         scans = response.json()["scans"]
