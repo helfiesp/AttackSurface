@@ -57,7 +57,8 @@ def download_exported_scan():
             # Convert the downloaded content to a string
             exported_scan_data = download_response.content.decode("utf-8")
 
-
+            print(exported_scan_data)
+            exit()
             for entry in exported_scan_data:
                 if "Host" in entry:
                     domain = entry["Host"]
