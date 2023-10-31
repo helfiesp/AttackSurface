@@ -11,9 +11,23 @@ sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
 
-scan_ids = [20, 111]
+
+def NMAPScanner(domain):
+    # Performs an NMAP scan on the requested IP address or domain name.
+    print("Performing NMAP scan on: {}".format(domain))
+    try:
+        # Run Nmap as an external comman
+        nmap_args = ["nmap", "-T4", "-F", domain]s
+        nmap_output = subprocess.run(nmap_args, capture_output=True, text=True)
+
+        # Extract the scan output from the completed process
+        nmap_data = nmap_output.stdout
+    except:
+        nmap_data = None
+    return nmap_data
 
 def download_exported_scan():
+    scan_ids = [20, 111]
     try:
         for scan_id in scan_ids:
             url = "https://nessus.okcsirt.no"
@@ -42,6 +56,12 @@ def download_exported_scan():
 
             # Convert the downloaded content to a string
             exported_scan_data = download_response.content.decode("utf-8")
+
+            for entry in exported_scan_data:
+                if "Host" in entry:
+                    domain = entry["Host"]
+                    nmap_data = NMAPScanner(domain)
+                    entry["NMAP_DATA"] = nmap_data
 
             # Connect to the SQLite database
             db_path = "/var/csirt/source/scanner/db.sqlite3"

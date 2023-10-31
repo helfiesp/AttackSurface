@@ -45,6 +45,4 @@ urlpatterns = [
     path('api/nessus/data/all_ips', views.APIViewAllNessusDataIPS, name="view_all_nessus_data_ips"),
     path('api/telegram/all', views.APIViewAllTelegramData, name="ViewAllTelegramData"),
 
-
-
 ]
