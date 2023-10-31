@@ -82,7 +82,7 @@ def download_exported_scan():
 
             # Insert exported scan data into the 'nessus_nessusdata' table
             insert_query = "INSERT INTO nessus_nessusdata (data, date, scan_id) VALUES (?, ?, ?);"
-            cursor.execute(insert_query, (exported_scan_data, current_date, scan_id))
+            cursor.execute(insert_query, (json_data, current_date, scan_id))
             conn.commit()
 
             conn.close()
