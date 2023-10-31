@@ -57,11 +57,12 @@ def download_exported_scan():
             # Convert the downloaded content to a string
             exported_scan_data = download_response.content.decode("utf-8")
 
-            for entry in exported_scan_data:
-                if "Host" in entry:
-                    domain = entry["Host"]
-                    nmap_data = NMAPScanner(domain)
-                    entry["NMAP_DATA"] = nmap_data
+            if scan_id == 111:
+                for entry in exported_scan_data:
+                    if "Host" in entry:
+                        domain = entry["Host"]
+                        nmap_data = NMAPScanner(domain)
+                        entry["NMAP_DATA"] = nmap_data
 
             # Connect to the SQLite database
             db_path = "/var/csirt/source/scanner/db.sqlite3"
