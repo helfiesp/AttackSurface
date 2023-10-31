@@ -17,7 +17,7 @@ def NMAPScanner(domain):
     print("Performing NMAP scan on: {}".format(domain))
     try:
         # Run Nmap as an external comman
-        nmap_args = ["nmap", "-T4", "-F", domain]s
+        nmap_args = ["nmap", "-T4", "-F", domain]
         nmap_output = subprocess.run(nmap_args, capture_output=True, text=True)
 
         # Extract the scan output from the completed process
