@@ -65,10 +65,8 @@ def download_exported_scan():
             exported_scan_data = download_response.content.decode("utf-8")
 
             json_data = convert_csv_to_json(exported_scan_data)
-            print(type(json_data))
-            print(str(json_data)[:200])
-
-            for entry in exported_scan_data:
+        
+            for entry in json_data:
                 if "Host" in entry:
                     domain = entry["Host"]
                     nmap_data = NMAPScanner(domain)
