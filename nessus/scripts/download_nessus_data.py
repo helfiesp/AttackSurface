@@ -36,8 +36,8 @@ def NMAPScanner(domain):
 def download_exported_scan():
     scan_ids = [111,20]
 
-    nmap_scans = []
-    nmap_scanned_hosts = []
+    nmap_scans = {}
+    nmap_scanned_hosts = []          
     try:
         for scan_id in scan_ids:
             url = "https://nessus.okcsirt.no"
@@ -73,10 +73,10 @@ def download_exported_scan():
                 if "Host" in entry:
                     domain = entry["Host"]
                     if domain in nmap_scanned_hosts:
-                        continue
+                        entry["NMAP_DATA"] = nmap_scans[domain]
                     else:
                         nmap_data = NMAPScanner(domain)
-                        nmap_scans.append({'host':domain, 'data':nmap_data})
+                        nmap_scans[domain] = nmap_data
                         nmap_scanned_hosts.append(domain)
 
             # Connect to the SQLite database
