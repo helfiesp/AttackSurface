@@ -6,6 +6,7 @@ import sqlite3
 import sys
 import time
 import json
+import csv
 
 # Append the path to the 'misc' directory to sys.path
 sys.path.append("/var/csirt/source/scanner")
@@ -62,7 +63,7 @@ def download_exported_scan():
 
             # Convert the downloaded content to a string
             exported_scan_data = download_response.content.decode("utf-8")
-            
+
             json_data = convert_csv_to_json(exported_scan_data)
             print(type(json_data))
             print(str(json_data)[:200])
