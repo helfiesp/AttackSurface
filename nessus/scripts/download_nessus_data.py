@@ -7,6 +7,7 @@ import sys
 import time
 import json
 import csv
+import subprocess
 
 # Append the path to the 'misc' directory to sys.path
 sys.path.append("/var/csirt/source/scanner")
