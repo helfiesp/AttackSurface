@@ -5,12 +5,18 @@ from requests.exceptions import RequestException
 import sqlite3
 import sys
 import time
+import json
 
 # Append the path to the 'misc' directory to sys.path
 sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
-
+def convert_csv_to_json(csv_data):
+    json_data = []
+    csv_reader = csv.DictReader(csv_data.splitlines())
+    for row in csv_reader:
+        json_data.append(row)
+    return json_data
 
 def NMAPScanner(domain):
     # Performs an NMAP scan on the requested IP address or domain name.
@@ -57,8 +63,12 @@ def download_exported_scan():
             # Convert the downloaded content to a string
             exported_scan_data = download_response.content.decode("utf-8")
 
-            print(exported_scan_data)
-            exit()
+            dataset = exported_scan_data.json()
+            csv_data = dataset
+            json_data = convert_csv_to_json(csv_data)
+            print(type(json_data))
+            print(str(json_data)[:200])
+
             for entry in exported_scan_data:
                 if "Host" in entry:
                     domain = entry["Host"]
