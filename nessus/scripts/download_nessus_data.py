@@ -22,16 +22,14 @@ def convert_csv_to_json(csv_data):
 def NMAPScanner(domain):
     # Performs an NMAP scan on the requested IP address or domain name.
     print("Performing NMAP scan on: {}".format(domain))
-    try:
-        # Run Nmap as an external comman
-        nmap_args = ["nmap", "-T4", "-F", domain]
-        nmap_output = subprocess.run(nmap_args, capture_output=True, text=True)
+    
+    # Run Nmap as an external comman
+    nmap_args = ["nmap", "-T4", "-F", domain]
+    nmap_output = subprocess.run(nmap_args, capture_output=True, text=True)
 
-        # Extract the scan output from the completed process
-        nmap_data = nmap_output.stdout
-    except:
-        nmap_data = None
-    print(nmap_data)
+    # Extract the scan output from the completed process
+    nmap_data = nmap_output.stdout
+
     return nmap_data
 
 def download_exported_scan():
