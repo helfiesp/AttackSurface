@@ -28,6 +28,7 @@ def NMAPScanner(domain):
 
 def download_exported_scan():
     scan_ids = [20, 111]
+    time.sleep(30)
     try:
         for scan_id in scan_ids:
             url = "https://nessus.okcsirt.no"
