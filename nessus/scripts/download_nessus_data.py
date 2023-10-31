@@ -31,6 +31,7 @@ def NMAPScanner(domain):
         nmap_data = nmap_output.stdout
     except:
         nmap_data = None
+    print(nmap_data)
     return nmap_data
 
 def download_exported_scan():
@@ -89,7 +90,7 @@ def download_exported_scan():
 
             # Insert exported scan data into the 'nessus_nessusdata' table
             insert_query = "INSERT INTO nessus_nessusdata (data, date, scan_id) VALUES (?, ?, ?);"
-            cursor.execute(insert_query, (json_data, current_date, scan_id))
+            cursor.execute(insert_query, (str(json_data), current_date, scan_id))
             conn.commit()
 
             conn.close()
