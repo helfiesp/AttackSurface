@@ -62,10 +62,8 @@ def download_exported_scan():
 
             # Convert the downloaded content to a string
             exported_scan_data = download_response.content.decode("utf-8")
-
-            dataset = exported_scan_data.json()
-            csv_data = dataset
-            json_data = convert_csv_to_json(csv_data)
+            
+            json_data = convert_csv_to_json(exported_scan_data)
             print(type(json_data))
             print(str(json_data)[:200])
 
