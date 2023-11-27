@@ -5,9 +5,7 @@ from datetime import datetime
 import sys
 
 sys.path.append("/var/csirt/source/scanner")
-import secrets
-
-print(secrets)
+from misc import secrets
 
 # Environment variables for API credentials
 API_USERNAME = os.environ["HELSECERT_API_USERNAME"]
