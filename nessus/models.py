@@ -38,3 +38,9 @@ class TelegramData(models.Model):
 class TelegramDataIDs(models.Model):
     channel_link = models.TextField(unique=True)
     last_message_id = models.BigIntegerField()
+
+class HelseCERTBlockList(models.Model):
+    full_query_url = models.TextField(default=None)
+    data = models.TextField(default=None, null=True)
+    category = models.TextField(default=None, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)

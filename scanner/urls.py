@@ -21,20 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index'),
     
-    path('domains', views.AttackSurfaceDomains,name="domains"),
-    path('domains/insert', views.InsertOKDomain,name="domains_insert"),
-    path('domains/urlscan', views.DomainURLScan,name="domains_urlscan"),
-    path('domains/ip_check', views.DomainIPCheck,name="domains_ip_check"),
-    path('domains/nmap_scan_domain', views.NMAPDomainScan, name='nmap_domain_scan'),
-    path('domains/ip_geolocation_lookup', views.IPGeoLookup, name='ip_geolocation_lookup'),
-    path('domains/update_comments/<int:pk>/', views.UpdateDomainComments, name='update_comments'),
-
-    path('nessus/scan', views.NessusScan,name="nessus_scan"),
-
-    path('domains/check', views.CheckDomain,name="check_domain"),
-
     # API
     path('api/domains/all', views.APIViewAllOKDomains, name="ViewAllOKDomains"),
     path('api/domains/search/<str:domain>', views.APIViewDomain, name="ViewDomain"),
