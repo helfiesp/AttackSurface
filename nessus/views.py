@@ -16,7 +16,7 @@ import sqlite3
 from datetime import datetime
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import F, Max
 
 
 
@@ -534,22 +534,22 @@ def APIViewHelseCERTBlockList(request):
 
 
 def APIViewAvailableQueryURLs(request):
-    # Fetches all unique query_urls and their dates from the HelseCERTBlockList table and returns as JSON
+    # Fetches the newest entry for each unique query_url from the HelseCERTBlockList table and returns as JSON
     if request.method == 'GET':
         # Assuming you want the same authentication for this API as well.
         authentication_result = authenticate_api(request, 'HelseCERTBlockList')
         if authentication_result:
             return authentication_result
 
-        # Aggregate data for each unique query_url
-        query_urls = HelseCERTBlockList.objects.values('query_url').annotate(date_added=F('date_added')).order_by('query_url')
-        
+        # Aggregate the newest date_added for each unique query_url
+        query_urls = HelseCERTBlockList.objects.values('query_url').annotate(newest_date=Max('date_added')).order_by('query_url')
+
         # Prepare the response data
         query_urls_data = []
         for entry in query_urls:
             query_urls_data.append({
                 "query_url": entry['query_url'],
-                "date_added": entry['date_added']
+                "newest_date": entry['newest_date']
             })
 
         return JsonResponse(query_urls_data, safe=False)
