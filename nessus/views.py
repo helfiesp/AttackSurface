@@ -503,7 +503,7 @@ def APIViewAllTelegramData(request):
 
 
 def APIViewHelseCERTBlockList(request):
-    # Fetches data from the HelseCERTBlockList table based on query_url and returns as JSON
+    # Fetches the newest data from the HelseCERTBlockList table based on query_url and returns as JSON
     if request.method == 'GET':
         # Assuming you want the same authentication for this API as well.
         authentication_result = authenticate_api(request, 'HelseCERTBlockList')
@@ -515,14 +515,17 @@ def APIViewHelseCERTBlockList(request):
             return JsonResponse({'error': 'query_url parameter is required'}, status=400)
 
         try:
-            helsecert_entry = HelseCERTBlockList.objects.get(query_url=query_url)
-            entry_data = {
-                "query_url": helsecert_entry.query_url,
-                "data": helsecert_entry.data,
-                "comment": helsecert_entry.comment,
-                "date_added": helsecert_entry.date_added,
-                # Extend with other fields if necessary
-            }
-            return JsonResponse(entry_data)
+            # Fetch the newest entry for the given query_url
+            helsecert_entry = HelseCERTBlockList.objects.filter(query_url=query_url).order_by('-date_added').first()
+            if helsecert_entry:
+                entry_data = {
+                    "query_url": helsecert_entry.query_url,
+                    "data": helsecert_entry.data,
+                    "comment": helsecert_entry.comment,
+                    "date_added": helsecert_entry.date_added,
+                }
+                return JsonResponse(entry_data)
+            else:
+                return JsonResponse({'error': 'Entry not found for the provided query_url'}, status=404)
         except HelseCERTBlockList.DoesNotExist:
             return JsonResponse({'error': 'Entry not found for the provided query_url'}, status=404)

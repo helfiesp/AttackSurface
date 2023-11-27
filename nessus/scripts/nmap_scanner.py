@@ -11,6 +11,14 @@ sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
 
+def fetch_domain():
+    connection = sqlite3.connect('/var/csirt/source/scanner/db.sqlite3')
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT domain FROM nessus_okdomains")
+    all_domains = cursor.fetchall()
+    domains_to_delete = []
+
 def NMAPDomainScan():
     if request.method == 'POST':
         domains = request.POST.get('domains').split(",")
