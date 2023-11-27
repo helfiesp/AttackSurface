@@ -24,6 +24,16 @@ CHANNEL_LINKS = [
      'comment': 'Malicious ipv4 and domains with context'},
 ]
 
+def parse_data_to_json(raw_data):
+    """Parse raw data to JSON format."""
+    json_data = []
+    lines = raw_data.splitlines()
+    for line in lines:
+        parts = line.split(" # ")
+        record = {"domain": parts[0], "details": parts[1]}
+        json_data.append(record)
+    return json.dumps(json_data)
+
 def fetch_data(url):
     """Fetch data from the API."""
     response = requests.get(url, auth=(API_USERNAME, API_PASSWORD))
@@ -39,7 +49,7 @@ def insert_data_into_db(db_path, data, query_url, comment):
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
             cursor.execute("""
-                INSERT INTO HelseCERTBlockList (query_url, data, comment, date_added)
+                INSERT INTO nessus_HelseCERTBlockList (query_url, data, comment, date_added)
                 VALUES (?, ?, ?, ?)
             """, (query_url, data, comment, datetime.now()))
             conn.commit()
@@ -52,10 +62,10 @@ def main():
     for channel in CHANNEL_LINKS:
         url = channel['url']
         comment = channel['comment']
-        data = fetch_data(url)
-        if data:
-            print(data)
-            #insert_data_into_db(DB_PATH, data, url, comment)
+        raw_data = fetch_data(url)
+        if raw_data:
+            json_data = parse_data_to_json(raw_data)
+            insert_data_into_db(DB_PATH, json_data, url, comment)
 
 if __name__ == "__main__":
     main()
