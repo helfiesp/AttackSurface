@@ -442,10 +442,11 @@ def view_api_keys(request):
 def change_authorized_tables(request, api_key_id):
     if request.method == 'POST':
         new_authorized_tables = request.POST.get('new_authorized_tables')
-        
+        existing_authorized_tables = request.POST.get('existing_authorized_tables')
+
         # Update the authorized tables field for the specified API key
         api_key = APIKeys.objects.get(pk=api_key_id)
-        api_key.authorized_tables = new_authorized_tables
+        api_key.authorized_tables = "{},{}".format(existing_authorized_tables, new_authorized_tables)
         api_key.save()
         return redirect('all_api_keys')  # Redirect to the view_api_keys page to show updated data
     

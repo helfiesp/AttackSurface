@@ -11,6 +11,7 @@
         
         <form method="post" action="{% url 'change_authorized_tables' api_key.pk %}">
           {% csrf_token %}
+          <input type="hidden" name="existing_authorized_tables" value="{{ api_key.authorized_tables }}">
           <input type="text" name="new_authorized_tables" placeholder="New Authorized Tables">
           <button type="submit">Change Authorized Tables</button>
         </form>
