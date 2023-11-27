@@ -20,7 +20,6 @@ from nessus.views import *
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     
     # API
     path('api/domains/all', views.APIViewAllOKDomains, name="ViewAllOKDomains"),
