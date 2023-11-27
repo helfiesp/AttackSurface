@@ -54,7 +54,8 @@ def main():
         comment = channel['comment']
         data = fetch_data(url)
         if data:
-            insert_data_into_db(DB_PATH, data, url, comment)
+            print(data)
+            #insert_data_into_db(DB_PATH, data, url, comment)
 
 if __name__ == "__main__":
     main()
