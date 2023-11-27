@@ -3,6 +3,7 @@ import requests
 import sqlite3
 from datetime import datetime
 import sys
+import json
 
 sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
