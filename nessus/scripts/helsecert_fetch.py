@@ -2,6 +2,7 @@ import os
 import requests
 import sqlite3
 from datetime import datetime
+sys.path.append("/var/csirt/source/scanner")
 import secrets
 
 # Environment variables for API credentials
