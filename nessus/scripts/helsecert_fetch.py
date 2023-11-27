@@ -46,7 +46,7 @@ def fetch_data(url):
 
 def insert_data_into_db(db_path, data, query_url, comment):
     """Insert data into the SQLite database."""
-    query_url = query_url.replace("https://data.helsecert.no/blocklist/v2?f=", "")
+    query_url = query_url.replace("https://data.helsecert.no/blocklist/v2?f=", "").replace("&", "-")
     try:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
