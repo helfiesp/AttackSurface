@@ -511,7 +511,6 @@ def APIViewHelseCERTBlockList(request):
             return authentication_result
 
         query_url = request.GET.get('query_url')
-        print(query_url)
         if not query_url:
             return JsonResponse({'error': 'query_url parameter is required'}, status=400)
 
@@ -530,3 +529,25 @@ def APIViewHelseCERTBlockList(request):
                 return JsonResponse({'error': 'Entry not found for the provided query_url'}, status=404)
         except HelseCERTBlockList.DoesNotExist:
             return JsonResponse({'error': 'Entry not found for the provided query_url'}, status=404)
+
+
+def APIViewAvailableQueryURLs(request):
+    # Fetches all unique query_urls and their dates from the HelseCERTBlockList table and returns as JSON
+    if request.method == 'GET':
+        # Assuming you want the same authentication for this API as well.
+        authentication_result = authenticate_api(request, 'HelseCERTBlockList')
+        if authentication_result:
+            return authentication_result
+
+        # Aggregate data for each unique query_url
+        query_urls = HelseCERTBlockList.objects.values('query_url').annotate(date_added=F('date_added')).order_by('query_url')
+        
+        # Prepare the response data
+        query_urls_data = []
+        for entry in query_urls:
+            query_urls_data.append({
+                "query_url": entry['query_url'],
+                "date_added": entry['date_added']
+            })
+
+        return JsonResponse(query_urls_data, safe=False)

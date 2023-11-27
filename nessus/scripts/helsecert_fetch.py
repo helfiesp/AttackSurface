@@ -9,19 +9,21 @@ sys.path.append("/var/csirt/source/scanner")
 from misc import secrets
 
 # Environment variables for API credentials
+HELSECERT_BLOCKLIST_URL = os.environ["HELSECERT_BLOCKLIST_URL"]
 API_USERNAME = os.environ["HELSECERT_API_USERNAME"]
 API_PASSWORD = os.environ["HELSECERT_API_PASSWORD"]
+
 
 # Database path
 DB_PATH = "/var/csirt/source/scanner/db.sqlite3"
 
 # API endpoints to fetch data from
 CHANNEL_LINKS = [
-    {'url': 'https://data.helsecert.no/blocklist/v2?f=list_context&t=domain&category=phishing',
+    {'url': '{}list_context&t=domain&category=phishing'.format(HELSECERT_BLOCKLIST_URL),
      'comment': 'Phishing domains with context'},
-    {'url': 'https://data.helsecert.no/blocklist/v2?f=list_context&t=domain,ipv4&category=phishing',
+    {'url': '{}list_context&t=domain,ipv4&category=phishing'.format(HELSECERT_BLOCKLIST_URL),
      'comment': 'Phishing domains and ipv4 with context'},
-    {'url': 'https://data.helsecert.no/blocklist/v2?f=list_context&t=domain,ipv4',
+    {'url': '{}list_context&t=domain,ipv4'.format(HELSECERT_BLOCKLIST_URL),
      'comment': 'Malicious ipv4 and domains with context'},
 ]
 
@@ -46,7 +48,7 @@ def fetch_data(url):
 
 def insert_data_into_db(db_path, data, query_url, comment):
     """Insert data into the SQLite database."""
-    query_url = query_url.replace("https://data.helsecert.no/blocklist/v2?f=", "").replace("&", "-")
+    query_url = query_url.replace(HELSECERT_BLOCKLIST_URL, "").replace("&", "-")
     try:
         with sqlite3.connect(db_path) as conn:
             cursor = conn.cursor()
