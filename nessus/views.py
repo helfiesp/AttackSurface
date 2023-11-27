@@ -510,7 +510,7 @@ def APIViewHelseCERTBlockList(request):
         if authentication_result:
             return authentication_result
 
-        query_url = request.GET.get('query_url')
+        query_url = str(request.GET.get('query_url'))
         if not query_url:
             return JsonResponse({'error': 'query_url parameter is required'}, status=400)
 
