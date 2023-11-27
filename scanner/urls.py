@@ -32,5 +32,5 @@ urlpatterns = [
     path('api/nessus/data/all_ips', views.APIViewAllNessusDataIPS, name="view_all_nessus_data_ips"),
     path('api/telegram/all', views.APIViewAllTelegramData, name="ViewAllTelegramData"),
     path('api/helsecert/blocklist', views.APIViewHelseCERTBlockList, name="APIViewHelseCERTBlockList"),
-    path('api/helsecert/blocklist/view_queries', views.APIViewAvailableQueryURLs, name="APIViewAvailableQueryURLs"),
+    path('api/helsecert/blocklist/queries', views.APIViewAvailableQueryURLs, name="APIViewAvailableQueryURLs"),
 ]
