@@ -25,6 +25,10 @@ CHANNEL_LINKS = [
      'comment': 'Phishing domains and ipv4 with context'},
     {'url': '{}list_context&t=domain,ipv4'.format(HELSECERT_BLOCKLIST_URL),
      'comment': 'Malicious ipv4 and domains with context'},
+    {'url': '{}list_context&t=ipv4'.format(HELSECERT_BLOCKLIST_URL),
+     'comment': 'Malicious ipv4 with context'},
+    {'url': '{}list_context&t=domain'.format(HELSECERT_BLOCKLIST_URL),
+     'comment': 'Malicious domain with context'},
 ]
 
 def parse_data_to_json(raw_data):
